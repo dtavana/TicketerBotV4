@@ -44,7 +44,6 @@
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged",
-            "pre-push": "lint-staged",
             "post-commit": "git update-index --again"
         }
     },
