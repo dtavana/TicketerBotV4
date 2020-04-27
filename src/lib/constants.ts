@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { MessageEmbed } from "discord.js";
-import TicketerBotClient from "../bot/client/TicketerBot";
 import { AkairoClient } from "discord-akairo";
 
 export const EMBEDS = {
