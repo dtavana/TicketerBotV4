@@ -1,22 +1,19 @@
 {
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "no-loops",
-    "prettier"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
-  "rules": {
-    "no-unmodified-loop-condition": 2,
-    "no-loops/no-loops": 2,
-    "no-console": 1,
-    "prettier/prettier": 2,
-    "@typescript-eslint/explicit-function-return-type": 0
-  }
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "no-loops", "prettier"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier"
+    ],
+    "rules": {
+        "no-unmodified-loop-condition": 2,
+        "no-loops/no-loops": 2,
+        "no-console": 1,
+        "prettier/prettier": 2,
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "lines-between-class-members": 0
+    }
 }
