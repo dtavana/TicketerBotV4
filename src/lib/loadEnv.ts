@@ -1,15 +1,18 @@
-import {readFileSync} from 'fs';
-import {safeLoad} from 'js-yaml';
-import {IClientConfig} from './bot/structures/client/IClientConfig';
+import { readFileSync } from "fs";
+import { safeLoad } from "js-yaml";
+import TicketerBotConfig from "../bot/client/TicketerBotConfig";
 
-export default () => {
-    const botConfig: IClientConfig = safeLoad(readFileSync('bot.yml', 'utf8'));
-
-    saveToEnv(botConfig);
-};
-
-const saveToEnv = (object: IClientConfig | IServerConfig) => {
+const saveToEnv = (object: TicketerBotConfig) => {
+    // eslint-disable-next-line no-loops/no-loops
     for (const [key, value] of Object.entries(object)) {
         process.env[key] = value;
     }
+};
+
+export default (configFileName: string) => {
+    const botConfig: TicketerBotConfig = safeLoad(
+        readFileSync(configFileName, "utf8")
+    );
+
+    saveToEnv(botConfig);
 };
