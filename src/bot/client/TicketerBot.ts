@@ -68,10 +68,6 @@ export default class TicketerBotClient extends AkairoClient {
         await this._init();
         await this.login(process.env.BOT_TOKEN);
         this.settings.setClient(this);
-        this.logger.info(MESSAGES.EVENTS.READY(this), {
-            topic: TOPICS.DISCORD_AKAIRO,
-            event: EVENTS.INIT
-        });
     }
 
     private async _init() {
