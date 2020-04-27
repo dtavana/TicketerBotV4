@@ -106,7 +106,13 @@ export default class SettingsManager extends Provider {
     }
 
     public async init() {
-        const allGuildSettings = await GuildSettings.find();
-        console.log(allGuildSettings);
+        const allGuildSettings = await GuildSettings.find(
+            {},
+            { _id: 0, __v: 0 }
+        );
+
+        allGuildSettings.forEach((guildSetting) => {
+            this.items.set(guildSetting.guildId, guildSetting);
+        });
     }
 }
