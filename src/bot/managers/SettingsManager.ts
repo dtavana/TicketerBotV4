@@ -43,7 +43,7 @@ export default class SettingsManager extends Provider {
     }
 
     /**
-     * Returns `false` if `guild` was invalid or if a document is not found, otherwise returns the ID of the `guild` that was passed in
+     * Returns `false` if `guild` was invalid or if a document is not found, otherwise returns the value of the deleted key before deletion
      * @param {GuildResolvable} guild The guild to delete the key from
      * @param {string} key The key to delete
      */
@@ -54,10 +54,16 @@ export default class SettingsManager extends Provider {
         }
         const document = await this.model.findOne({ guildId });
         if (document != null) {
+            const previousValue = document[key];
             document[key] = undefined;
             await document.save();
-            delete this.items.get(guildId)[key];
-            return guildId;
+            this.items.delete(guildId);
+            const newGuildSettings = await GuildSettings.findOne(
+                { guildId },
+                { _id: 0, __v: 0 }
+            );
+            this.items.set(guildId, newGuildSettings);
+            return previousValue;
         }
         return false;
     }
@@ -85,10 +91,10 @@ export default class SettingsManager extends Provider {
     }
 
     /**
-     * Returns `false` if `guild` was invalid or if a document  is not found, otherwise returns the old value that was overwritten
+     * Returns `false` if `guild` was invalid or if a document is not found, otherwise returns the old value that was overwritten
      * @param {GuildResolvable} guild The guild to delete the key from
      * @param {string} key The key to delete
-     * @param {unknown} defaultValue The default value to return if the `guild`, `key` are invalid or if the document can not be found
+     * @param {unknown} value The value to set `key` to
      */
     public async set(guild: GuildResolvable, key: string, value: unknown) {
         const guildId = this.resolveGuild(guild);
@@ -97,10 +103,11 @@ export default class SettingsManager extends Provider {
         }
         const document = await this.model.findOne({ guildId });
         if (document != null) {
+            const previousValue = document[key];
             document[key] = value;
             await document.save();
             this.items.get(guildId)[key] = value;
-            return guildId;
+            return previousValue;
         }
         return false;
     }
