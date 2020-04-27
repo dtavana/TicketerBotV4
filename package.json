@@ -18,16 +18,22 @@
     "url": "https://github.com/dtavana/TicketerBotV4.git"
   },
   "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettier-format && npm run lint",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "dependencies": {
     "axios": "^0.19.2",
     "discord-akairo": "1Computer1/discord-akairo",
     "discord.js": "discordjs/discord.js",
     "js-yaml": "^3.13.1",
     "mongoose": "^5.9.10",
-    "pg-promise": "^10.5.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@types/mongoose": "^5.7.14",
     "@types/node": "^13.13.2",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
@@ -38,8 +44,5 @@
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
     "typescript": "^3.8.3"
-  },
-  "husky": {
-    "pre-commit": "npm run prettier-format && npm run lint"
   }
 }
