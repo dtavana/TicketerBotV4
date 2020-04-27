@@ -54,13 +54,7 @@ export default class TicketerBotClient extends AkairoClient {
         super(
             { ownerID: CLIENT_OPTIONS.OWNERS },
             {
-                messageCacheMaxSize: 1000,
-                ws: {
-                    intents: new Intents(Intents.ALL).remove(
-                        "GUILD_MESSAGE_TYPING",
-                        "DIRECT_MESSAGE_TYPING"
-                    )
-                }
+                messageCacheMaxSize: 1000
             }
         );
         this.settings = new SettingsManager(GuildSettings);
@@ -77,7 +71,7 @@ export default class TicketerBotClient extends AkairoClient {
 
     public async start() {
         await this._init();
-        this.login(process.env.BOT_TOKEN);
+        await this.login(process.env.BOT_TOKEN);
         this.settings.setClient(this);
         await this.settings.init();
         console.log(MESSAGES.EVENTS.READY(this));
