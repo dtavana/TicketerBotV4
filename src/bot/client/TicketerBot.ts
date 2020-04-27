@@ -1,29 +1,25 @@
-import {AkairoClient, CommandHandler, InhibitorHandler, ListenerHandler} from 'discord-akairo';
-import {join} from 'path';
-import {MESSAGES, CLIENT_OPTIONS} from '../../lib/constants';
-/*
-import BaseLogger from '../logging/BaseLogger';
-import ConsoleLogger from '../logging/ConsoleLogger';
-import DatabaseManager from "./DatabaseManager";
- */
+import {
+    AkairoClient,
+    CommandHandler,
+    InhibitorHandler,
+    ListenerHandler
+} from "discord-akairo";
+import { join } from "path";
+import { MESSAGES, CLIENT_OPTIONS } from "../../lib/constants";
+import { Intents } from "discord.js";
+import SettingsManager from "../managers/SettingsManager";
+import GuildSettings from "../../models/GuildSettings";
 
-declare module 'discord-akairo' {
+declare module "discord-akairo" {
     interface AkairoClient {
-        // db: DatabaseManager;
-        registrationDb;
         commandHandler: CommandHandler;
-        // loggers: BaseLogger[];
-        // sendLog: (payload: string) => void;
+        settings: SettingsManager;
     }
 }
 
-export default class PGClient extends AkairoClient {
-    // public loggers: BaseLogger[] = [new ConsoleLogger()];
-
-    // public db;
-
+export default class TicketerBotClient extends AkairoClient {
     public commandHandler: CommandHandler = new CommandHandler(this, {
-        directory: join(__dirname, '..', 'commands'),
+        directory: join(__dirname, "..", "commands"),
         prefix: CLIENT_OPTIONS.DEFAULT_PREFIX, // Change to PrefixSupplier
         aliasReplacement: /-/g,
         handleEdits: true,
@@ -33,19 +29,25 @@ export default class PGClient extends AkairoClient {
         ignorePermissions: CLIENT_OPTIONS.OWNERS,
         argumentDefaults: {
             prompt: {
-                modifyStart: (_, str) => MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_START(str),
-                modifyRetry: (_, str) => MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_RETRY(str),
+                modifyStart: (_, str) =>
+                    MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_START(str),
+                modifyRetry: (_, str) =>
+                    MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_RETRY(str),
                 timeout: MESSAGES.COMMAND_HANDLER.PROMPT.TIMEOUT,
                 ended: MESSAGES.COMMAND_HANDLER.PROMPT.ENDED,
-                cancel: MESSAGES.COMMAND_HANDLER.PROMPT.CANCEL,
+                cancel: MESSAGES.COMMAND_HANDLER.PROMPT.CANCEL
             },
-            otherwise: '',
-        },
+            otherwise: ""
+        }
     });
 
-    public inhibitorHandler = new InhibitorHandler(this, { directory: join(__dirname, '..', 'inhibitors') });
+    public inhibitorHandler = new InhibitorHandler(this, {
+        directory: join(__dirname, "..", "inhibitors")
+    });
 
-    public listenerHandler = new ListenerHandler(this, { directory: join(__dirname, '..', 'listeners') });
+    public listenerHandler = new ListenerHandler(this, {
+        directory: join(__dirname, "..", "listeners")
+    });
 
     public constructor() {
         // Initialize Client
@@ -53,10 +55,15 @@ export default class PGClient extends AkairoClient {
             { ownerID: CLIENT_OPTIONS.OWNERS },
             {
                 messageCacheMaxSize: 1000,
-                disableEveryone: true,
-                disabledEvents: ['TYPING_START'],
-            },
+                ws: {
+                    intents: new Intents(Intents.ALL).remove(
+                        "GUILD_MESSAGE_TYPING",
+                        "DIRECT_MESSAGE_TYPING"
+                    )
+                }
+            }
         );
+        this.settings = new SettingsManager(GuildSettings);
     }
 
     /*
@@ -70,8 +77,10 @@ export default class PGClient extends AkairoClient {
 
     public async start() {
         await this._init();
-        //this.db = new DatabaseManager();
         this.login(process.env.BOT_TOKEN);
+        this.settings.setClient(this);
+        await this.settings.init();
+        console.log(MESSAGES.EVENTS.READY(this));
     }
 
     private async _init() {
@@ -80,13 +89,13 @@ export default class PGClient extends AkairoClient {
         this.listenerHandler.setEmitters({
             commandHandler: this.commandHandler,
             inhibitorHandler: this.inhibitorHandler,
-            listenerHandler: this.listenerHandler,
+            listenerHandler: this.listenerHandler
         });
         this.commandHandler.loadAll();
-        this.sendLog(MESSAGES.COMMAND_HANDLER.LOADED);
+        //this.sendLog(MESSAGES.COMMAND_HANDLER.LOADED);
         this.inhibitorHandler.loadAll();
-        this.sendLog(MESSAGES.INHIBITOR_HANDLER.LOADED);
+        //this.sendLog(MESSAGES.INHIBITOR_HANDLER.LOADED);
         this.listenerHandler.loadAll();
-        this.sendLog(MESSAGES.LISTENER_HANDLER.LOADED);
+        //this.sendLog(MESSAGES.LISTENER_HANDLER.LOADED);
     }
 }
