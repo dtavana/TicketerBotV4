@@ -16,6 +16,7 @@
     "no-unmodified-loop-condition": 2,
     "no-loops/no-loops": 2,
     "no-console": 1,
-    "prettier/prettier": 2
+    "prettier/prettier": 2,
+    "@typescript-eslint/explicit-function-return-type": 0
   }
 }
