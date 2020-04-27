@@ -1,5 +1,6 @@
-import { AkairoClient } from "discord-akairo";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { MessageEmbed } from "discord.js";
+import TicketerBotClient from "../bot/client/TicketerBot";
 
 export const EMBEDS = {
     SUCCESS: () => {
@@ -30,8 +31,10 @@ export const MESSAGES = {
         LOADED: "Command Handler has been loaded!"
     },
     EVENTS: {
-        READY: (client: AkairoClient) =>
-            `Now logged in as ${client.user?.tag} (${client.user?.id}). Serving ${client.users.cache.size} users.`
+        READY: (client: TicketerBotClient) =>
+            `Now logged in as ${client.user!.tag} (${
+                client.user!.id
+            }). Serving ${client.users.cache.size} users.`
     },
     INHIBITOR_HANDLER: {
         LOADED: "Inhibitor Handler has been loaded!"
