@@ -5,7 +5,7 @@ class GuildSettings {
     guildId!: string;
 
     @prop()
-    test?: string;
+    prefix?: string;
 }
 
 export default getModelForClass(GuildSettings);
