@@ -1,6 +1,11 @@
 import { MessageEmbed } from "discord.js";
 import { AkairoClient } from "discord-akairo";
 
+export const SETTINGS = {
+    GUILD_ID: "guildId",
+    PREFIX: "prefix"
+};
+
 export const EMBEDS = {
     SUCCESS: () => {
         return new MessageEmbed()
@@ -57,6 +62,6 @@ export const ROLE_IDS = {};
 export const CHANNEL_IDS = {};
 
 export const CLIENT_OPTIONS = {
-    DEFAULT_PREFIX: "- ",
+    DEFAULT_PREFIX: "-",
     OWNERS: ["112762841173368832"]
 };
