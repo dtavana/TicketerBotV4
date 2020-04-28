@@ -5,11 +5,12 @@ import {
     ListenerHandler
 } from "discord-akairo";
 import { join } from "path";
-import { MESSAGES, CLIENT_OPTIONS } from "../../lib/constants";
+import { MESSAGES, CLIENT_OPTIONS, SETTINGS } from "../../lib/constants";
 import SettingsManager from "../managers/SettingsManager";
 import GuildSettings from "../../models/GuildSettings";
 import { Logger } from "winston";
 import logger, { TOPICS, EVENTS } from "../../utils/logger";
+import { Message } from "discord.js";
 
 declare module "discord-akairo" {
     interface AkairoClient {
@@ -20,9 +21,26 @@ declare module "discord-akairo" {
 }
 
 export default class TicketerBotClient extends AkairoClient {
+    public inhibitorHandler = new InhibitorHandler(this, {
+        directory: join(__dirname, "..", "inhibitors")
+    });
+
+    public listenerHandler = new ListenerHandler(this, {
+        directory: join(__dirname, "..", "listeners")
+    });
+
+    public logger = logger;
+
+    public settings = new SettingsManager(GuildSettings);
+
     public commandHandler: CommandHandler = new CommandHandler(this, {
         directory: join(__dirname, "..", "commands"),
-        prefix: CLIENT_OPTIONS.DEFAULT_PREFIX, // Change to PrefixSupplier
+        prefix: async (message: Message): Promise<string> =>
+            await this.settings.get(
+                message.guild!,
+                SETTINGS.PREFIX,
+                CLIENT_OPTIONS.DEFAULT_PREFIX
+            ),
         aliasReplacement: /-/g,
         handleEdits: true,
         commandUtil: true,
@@ -43,16 +61,6 @@ export default class TicketerBotClient extends AkairoClient {
         }
     });
 
-    public inhibitorHandler = new InhibitorHandler(this, {
-        directory: join(__dirname, "..", "inhibitors")
-    });
-
-    public listenerHandler = new ListenerHandler(this, {
-        directory: join(__dirname, "..", "listeners")
-    });
-
-    public logger = logger;
-
     public constructor() {
         // Initialize Client
         super(
@@ -61,7 +69,6 @@ export default class TicketerBotClient extends AkairoClient {
                 messageCacheMaxSize: 1000
             }
         );
-        this.settings = new SettingsManager(GuildSettings);
     }
 
     public async start() {

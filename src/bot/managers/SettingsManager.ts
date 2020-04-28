@@ -4,6 +4,8 @@ import { Provider } from "discord-akairo";
 import TicketerBotClient from "../client/TicketerBot";
 import { GuildResolvable } from "discord.js";
 import GuildSettings from "../../models/GuildSettings";
+import { Message } from "discord.js";
+import { CLIENT_OPTIONS } from "../../lib/constants";
 
 export default class SettingsManager extends Provider {
     public db!: Mongoose;
@@ -32,7 +34,7 @@ export default class SettingsManager extends Provider {
      * Returns `false` if `guild` was invalid, otherwise returns the ID of the `guild` that was passed in
      * @param {GuildResolvable} guild The guild to clear settings from
      */
-    public async clear(guild: GuildResolvable) {
+    public async clear(guild: GuildResolvable): Promise<false | string> {
         const guildId = this.resolveGuild(guild);
         if (guildId == null) {
             return false;
@@ -47,7 +49,10 @@ export default class SettingsManager extends Provider {
      * @param {GuildResolvable} guild The guild to delete the key from
      * @param {string} key The key to delete
      */
-    public async delete(guild: GuildResolvable, key: string) {
+    public async delete(
+        guild: GuildResolvable,
+        key: string
+    ): Promise<false | string> {
         const guildId = this.resolveGuild(guild);
         if (guildId == null) {
             return false;
@@ -96,7 +101,11 @@ export default class SettingsManager extends Provider {
      * @param {string} key The key to delete
      * @param {unknown} value The value to set `key` to
      */
-    public async set(guild: GuildResolvable, key: string, value: unknown) {
+    public async set(
+        guild: GuildResolvable,
+        key: string,
+        value: unknown
+    ): Promise<unknown> {
         const guildId = this.resolveGuild(guild);
         if (guildId == null) {
             return false;
