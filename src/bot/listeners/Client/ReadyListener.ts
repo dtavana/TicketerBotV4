@@ -15,7 +15,7 @@ export default class ReadyListener extends Listener {
             topic: TOPICS.DISCORD,
             event: EVENTS.READY
         });
-        this.client.user!.setActivity(
+        this.client.user?.setActivity(
             MESSAGES.EVENTS.READY.ACTIVITY(this.client.guilds.cache.size),
             { type: "WATCHING" }
         );
