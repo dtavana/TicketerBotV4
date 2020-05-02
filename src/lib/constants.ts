@@ -37,9 +37,7 @@ export const MESSAGES = {
     EVENTS: {
         READY: {
             LOG: (client: AkairoClient) =>
-                `Now logged in as ${client.user!.tag} (${
-                    client.user!.id
-                }). Serving ${client.users.cache.size} users.`,
+                `Now logged in as ${client.user?.tag} (${client.user?.id}). Serving ${client.users.cache.size} users.`,
             ACTIVITY: (guildCount: number) => `${guildCount} servers`
         }
     },
