@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES2019",
+    "lib": ["ES2019"],
     "module": "commonjs",
-    "lib": [ "es2015", "es2016", "esnext" ],
     "resolveJsonModule": true,
     "declaration": false,
     "outDir": "./dist",
     "rootDir": "./src",
+    "alwaysStrict": true,
     "strict": true,
     "noImplicitAny": false,
     "moduleResolution": "node",
