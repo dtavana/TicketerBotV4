@@ -2,7 +2,7 @@ import { MessageEmbed } from "discord.js";
 import { AkairoClient } from "discord-akairo";
 
 export const SETTINGS = {
-    GUILD_ID: "guildId",
+    GUILDID: "guildId",
     PREFIX: "prefix"
 };
 
@@ -62,4 +62,14 @@ export const CHANNEL_IDS = {};
 export const CLIENT_OPTIONS = {
     DEFAULT_PREFIX: "-",
     OWNERS: ["112762841173368832"]
+};
+
+export const PROMETHEUS = {
+    MESSAGE_COUNTER: "ticketer_messages_total",
+    COMMAND_COUNTER: "ticketer_commands_total",
+
+    HELP: {
+        MESSAGE_COUNTER: "Total number of messages Ticketer has seen.",
+        COMMAND_COUNTER: "Total number of commands used."
+    }
 };
