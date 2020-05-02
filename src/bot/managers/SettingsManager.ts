@@ -1,16 +1,15 @@
 import { Mongoose, Model, Document } from "mongoose";
 import mongoClient from "./mongoClient";
 import { Provider } from "discord-akairo";
-import TicketerBotClient from "../client/TicketerBot";
-import { GuildResolvable } from "discord.js";
 import GuildSettings from "../../models/GuildSettings";
-import { Message } from "discord.js";
-import { CLIENT_OPTIONS } from "../../lib/constants";
+import { Guild } from "discord.js";
+import { SETTINGS } from "../../lib/constants";
 
 export default class SettingsManager extends Provider {
     public db!: Mongoose;
-    private client!: TicketerBotClient;
     private model!: Model<Document>;
+
+    public ["constructor"]: typeof SettingsManager;
 
     public constructor(model: Model<Document>) {
         super();
@@ -22,20 +21,12 @@ export default class SettingsManager extends Provider {
         this.db = await mongoClient();
     }
 
-    public setClient(client: TicketerBotClient) {
-        this.client = client;
-    }
-
-    private resolveGuild(guild: GuildResolvable): string | null {
-        return this.client.guilds.resolveID(guild);
-    }
-
     /**
      * Returns `false` if `guild` was invalid, otherwise returns the ID of the `guild` that was passed in
-     * @param {GuildResolvable} guild The guild to clear settings from
+     * @param {Guild | string} guild The guild to clear settings from
      */
-    public async clear(guild: GuildResolvable): Promise<false | string> {
-        const guildId = this.resolveGuild(guild);
+    public async clear(guild: Guild | string) {
+        const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return false;
         }
@@ -46,14 +37,11 @@ export default class SettingsManager extends Provider {
 
     /**
      * Returns `false` if `guild` was invalid or if a document is not found, otherwise returns the value of the deleted key before deletion
-     * @param {GuildResolvable} guild The guild to delete the key from
+     * @param {Guild | string} guild The guild to delete the key from
      * @param {string} key The key to delete
      */
-    public async delete(
-        guild: GuildResolvable,
-        key: string
-    ): Promise<false | string> {
-        const guildId = this.resolveGuild(guild);
+    public async delete(guild: Guild | string, key: string) {
+        const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return false;
         }
@@ -75,16 +63,12 @@ export default class SettingsManager extends Provider {
 
     /**
      * Returns `defaultValue` if `guild` was invalid or if a document is not found, otherwise returns the ID of the `guild` that was passed in
-     * @param {GuildResolvable} guild The guild to delete the key from
+     * @param {Guild | string} guild The guild to delete the key from
      * @param {string} key The key to delete
      * @param {unknown} defaultValue The default value to return if the `guild`, `key` are invalid or if the document can not be found
      */
-    public async get(
-        guild: GuildResolvable,
-        key: string,
-        defaultValue: unknown
-    ) {
-        const guildId = this.resolveGuild(guild);
+    public get(guild: Guild | string, key: string, defaultValue: unknown) {
+        const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return defaultValue;
         }
@@ -97,16 +81,12 @@ export default class SettingsManager extends Provider {
 
     /**
      * Returns `false` if `guild` was invalid or if a document is not found, otherwise returns the old value that was overwritten
-     * @param {GuildResolvable} guild The guild to delete the key from
+     * @param {Guild | string} guild The guild to delete the key from
      * @param {string} key The key to delete
      * @param {unknown} value The value to set `key` to
      */
-    public async set(
-        guild: GuildResolvable,
-        key: string,
-        value: unknown
-    ): Promise<unknown> {
-        const guildId = this.resolveGuild(guild);
+    public async set(guild: Guild | string, key: string, value: unknown) {
+        const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return false;
         }
@@ -130,5 +110,14 @@ export default class SettingsManager extends Provider {
         allGuildSettings.forEach((guildSetting) => {
             this.items.set(guildSetting.guildId, guildSetting);
         });
+    }
+
+    private static getGuildId(guild: string | Guild) {
+        if (guild instanceof Guild) return guild.id;
+        if (guild === "global" || guild === null) return "0";
+        if (typeof guild === "string" && /^\d+$/.test(guild)) return guild;
+        throw new TypeError(
+            'Invalid guild specified. Must be a Guild instance, guild ID, "global", or null.'
+        );
     }
 }
