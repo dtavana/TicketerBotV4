@@ -1,14 +1,17 @@
 import { Mongoose, Model, Document } from "mongoose";
-import mongoClient from "./mongoClient";
+import mongoClient from "../../utils/mongoClient";
 import { Provider } from "discord-akairo";
 import GuildSettings from "../../models/GuildSettings";
 import { Guild } from "discord.js";
+import { AkairoClient } from "discord-akairo";
+import { CLIENT_OPTIONS, SETTINGS } from "../../lib/constants";
 
 export default class SettingsManager extends Provider {
-    public db!: Mongoose;
-    private model!: Model<Document>;
-
     public ["constructor"]: typeof SettingsManager;
+
+    public db!: Mongoose;
+    private client!: AkairoClient;
+    private model!: Model<Document>;
 
     public constructor(model: Model<Document>) {
         super();
@@ -18,6 +21,10 @@ export default class SettingsManager extends Provider {
 
     private async setDatabase() {
         this.db = await mongoClient();
+    }
+
+    public setClient(client: AkairoClient) {
+        this.client = client;
     }
 
     /**
@@ -31,6 +38,7 @@ export default class SettingsManager extends Provider {
         }
         await this.model.deleteOne({ guildId });
         this.items.delete(guildId);
+        this.setGuildPrefix(guildId, CLIENT_OPTIONS.DEFAULT_PREFIX);
         return guildId;
     }
 
@@ -55,6 +63,8 @@ export default class SettingsManager extends Provider {
                 { _id: 0, __v: 0 }
             );
             this.items.set(guildId, newGuildSettings);
+            if (key === SETTINGS.PREFIX)
+                this.setGuildPrefix(guildId, CLIENT_OPTIONS.DEFAULT_PREFIX);
             return previousValue;
         }
         return false;
@@ -76,14 +86,15 @@ export default class SettingsManager extends Provider {
             return defaultValue;
         }
         const guildSettings = this.items.get(guildId);
-        if (guildSettings === undefined) return defaultValue;
-        else if (!(key in guildSettings)) return defaultValue;
-
+        if (guildSettings === undefined) {
+            return defaultValue;
+        }
+        if (guildSettings[key] === undefined) return defaultValue;
         return guildSettings[key];
     }
 
     /**
-     * Returns `false` if `guild` was invalid or if a document is not found, otherwise returns the old value that was overwritten
+     * Returns `undefined` if `guild` was invalid or if a previous document is not found, otherwise returns the old value that was overwritten
      * @param {Guild | string} guild The guild to delete the key from
      * @param {string} key The key to delete
      * @param {unknown} value The value to set `key` to
@@ -95,17 +106,22 @@ export default class SettingsManager extends Provider {
     ) {
         const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
-            return false;
+            return undefined;
         }
+        let previousValue = undefined;
         const document = await this.model.findOne({ guildId });
         if (document != null) {
-            const previousValue = document[key];
+            previousValue = document[key];
             document[key] = value;
             await document.save();
             this.items.get(guildId)[key] = value;
-            return previousValue;
+        } else {
+            await this.model.create({ guildId, key: value });
+            this.items.set(guildId, { key: value });
         }
-        return false;
+        if (key === SETTINGS.PREFIX)
+            this.setGuildPrefix(guildId, value as string);
+        return previousValue;
     }
 
     public async init() {
@@ -116,7 +132,24 @@ export default class SettingsManager extends Provider {
 
         allGuildSettings.forEach((guildSetting) => {
             this.items.set(guildSetting.guildId, guildSetting);
+            this.setGuildPrefix(guildSetting.guildId, guildSetting.prefix);
         });
+    }
+
+    private setGuildPrefix(
+        guild: Guild | string | null,
+        prefix: string | undefined
+    ) {
+        if (!guild) return;
+        // TODO: this may cause bugs, maybe wait until client is ready
+        const resolvedGuild = this.client.guilds.resolve(guild);
+        if (resolvedGuild) {
+            if (prefix) {
+                resolvedGuild.prefix = prefix;
+            } else if (resolvedGuild) {
+                resolvedGuild.prefix = CLIENT_OPTIONS.DEFAULT_PREFIX;
+            }
+        }
     }
 
     private static getGuildId(guild: Guild | string | null) {
