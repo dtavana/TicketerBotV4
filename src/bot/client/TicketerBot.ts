@@ -37,7 +37,7 @@ export default class TicketerBotClient extends AkairoClient {
         directory: join(__dirname, "..", "commands"),
         prefix: async (message: Message): Promise<string> =>
             await this.settings.get(
-                message.guild!,
+                message.guild,
                 SETTINGS.PREFIX,
                 CLIENT_OPTIONS.DEFAULT_PREFIX
             ),
@@ -74,7 +74,6 @@ export default class TicketerBotClient extends AkairoClient {
     public async start() {
         await this._init();
         await this.login(process.env.BOT_TOKEN);
-        this.settings.setClient(this);
     }
 
     private async _init() {

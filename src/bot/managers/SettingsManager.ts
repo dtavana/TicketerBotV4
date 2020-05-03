@@ -3,7 +3,6 @@ import mongoClient from "./mongoClient";
 import { Provider } from "discord-akairo";
 import GuildSettings from "../../models/GuildSettings";
 import { Guild } from "discord.js";
-import { SETTINGS } from "../../lib/constants";
 
 export default class SettingsManager extends Provider {
     public db!: Mongoose;
@@ -14,7 +13,7 @@ export default class SettingsManager extends Provider {
     public constructor(model: Model<Document>) {
         super();
         this.model = model;
-        this.setDatabase();
+        this.setDatabase().then();
     }
 
     private async setDatabase() {
@@ -40,7 +39,7 @@ export default class SettingsManager extends Provider {
      * @param {Guild | string} guild The guild to delete the key from
      * @param {string} key The key to delete
      */
-    public async delete(guild: Guild | string, key: string) {
+    public async delete(guild: Guild | string | null, key: string) {
         const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return false;
@@ -67,7 +66,11 @@ export default class SettingsManager extends Provider {
      * @param {string} key The key to delete
      * @param {unknown} defaultValue The default value to return if the `guild`, `key` are invalid or if the document can not be found
      */
-    public get(guild: Guild | string, key: string, defaultValue: unknown) {
+    public get(
+        guild: Guild | string | null,
+        key: string,
+        defaultValue?: unknown
+    ) {
         const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return defaultValue;
@@ -85,7 +88,11 @@ export default class SettingsManager extends Provider {
      * @param {string} key The key to delete
      * @param {unknown} value The value to set `key` to
      */
-    public async set(guild: Guild | string, key: string, value: unknown) {
+    public async set(
+        guild: Guild | string | null,
+        key: string,
+        value: unknown
+    ) {
         const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return false;
@@ -112,7 +119,8 @@ export default class SettingsManager extends Provider {
         });
     }
 
-    private static getGuildId(guild: string | Guild) {
+    private static getGuildId(guild: Guild | string | null) {
+        if (guild === null) return null;
         if (guild instanceof Guild) return guild.id;
         if (guild === "global" || guild === null) return "0";
         if (typeof guild === "string" && /^\d+$/.test(guild)) return guild;
