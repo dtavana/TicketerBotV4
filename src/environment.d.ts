@@ -8,4 +8,10 @@ declare global {
     }
 }
 
+declare module "discord.js" {
+    interface Guild {
+        prefix?: string;
+    }
+}
+
 export {};
