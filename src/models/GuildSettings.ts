@@ -1,4 +1,4 @@
-import { prop, getModelForClass } from "@typegoose/typegoose";
+import { prop, getModelForClass, arrayProp } from "@typegoose/typegoose";
 
 class GuildSettings {
     @prop({ unique: true })
@@ -6,6 +6,12 @@ class GuildSettings {
 
     @prop()
     prefix?: string;
+
+    @arrayProp({ items: String })
+    blacklist?: string[];
+
+    @prop()
+    adminRole?: string;
 }
 
 export default getModelForClass(GuildSettings);
