@@ -1,7 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { AkairoClient } from "discord-akairo";
-import { User } from "discord.js";
-import { Role } from "discord.js";
+import { User, Role } from "discord.js";
 
 export const SETTINGS = {
     GUILDID: "guildId",
@@ -22,6 +21,15 @@ export const EMBEDS = {
             .setFooter(process.env.FOOTER_TEXT)
             .setColor("RED")
             .setTimestamp();
+    },
+    PROMPT: (text: string): MessageEmbed => {
+        return new MessageEmbed()
+            .setFooter(process.env.FOOTER_TEXT)
+            .setColor("YELLOW")
+            .setTimestamp()
+            .setDescription(
+                `${text}\n\nType \`cancel\` to cancel the command.`
+            );
     }
 };
 export const COMMAND_NAMES = {
@@ -39,30 +47,47 @@ export const MESSAGES = {
     COMMANDS: {
         MODERATION: {
             BLACKLIST: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, what member do you want to blacklist?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please mention a member.`
+                },
                 INVALID: (target: User) =>
-                    `${target.toString()} is already blacklisted in this server`,
+                    `${target} is already blacklisted in this server`,
+                NOBOT: () => "Bots can not be blacklisted",
                 SUCCESS: (target: User) =>
-                    `${target.toString()} has been added to the blacklist`
+                    `${target} has been added to the blacklist`
             },
             UNBLACKLIST: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, what member do you want to unblacklist?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please mention a member.`
+                },
                 INVALID: (target: User) =>
-                    `${target.toString()} is not blacklisted in this server`,
+                    `${target} is not blacklisted in this server`,
                 SUCCESS: (target: User) =>
-                    `${target.toString()} has been removed from the blacklist`
+                    `${target} has been removed from the blacklist`
             }
         },
         CONFIG: {
             NOTSET: "Not set",
-            ADMINROLE: (old: Role | string, target: Role) =>
-                `Old Admin Role: ${old.toString()}\nNew Admin Role: ${target.toString()}`
+            ADMINROLE: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, what role do you want to set as the administrator role?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please mention a role.`
+                },
+                SUCCESS: (old: Role | string, target: Role) =>
+                    `Old Admin Role: ${old}\nNew Admin Role: ${target}`
+            }
         }
     },
     COMMAND_HANDLER: {
         PROMPT: {
-            MODIFY_START: (str: string) =>
-                `${str}\n\nType \`cancel\` to cancel the command.`,
-            MODIFY_RETRY: (str: string) =>
-                `${str}\n\nType \`cancel\` to cancel the command.`,
             TIMEOUT: "Guess you took too long, the command has been cancelled.",
             ENDED: "The command has been cancelled.",
             CANCEL: "The command has been cancelled."
