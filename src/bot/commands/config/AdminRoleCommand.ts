@@ -52,9 +52,9 @@ export default class AdminRoleCommand extends Command {
                 adminRole = MESSAGES.COMMANDS.CONFIG.NOTSET;
             }
         }
-        await message.channel.send(
+        await message.util?.send(
             EMBEDS.SUCCESS().setDescription(
-                MESSAGES.COMMANDS.CONFIG.ADMINROLE(adminRole, target)
+                MESSAGES.COMMANDS.CONFIG.ADMINROLE.SUCCESS(adminRole, target)
             )
         );
     }

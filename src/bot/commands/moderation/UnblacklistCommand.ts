@@ -42,7 +42,7 @@ export default class UnblacklistCommand extends Command {
             []
         );
         if (!blacklist.includes(target.id)) {
-            return await message.channel.send(
+            return await message.util?.send(
                 EMBEDS.FAILURE().setDescription(
                     MESSAGES.COMMANDS.MODERATION.UNBLACKLIST.INVALID(target)
                 )
@@ -59,7 +59,7 @@ export default class UnblacklistCommand extends Command {
                       SETTINGS.BLACKLIST,
                       blacklist
                   );
-            return await message.channel.send(
+            return await message.util?.send(
                 EMBEDS.SUCCESS().setDescription(
                     MESSAGES.COMMANDS.MODERATION.UNBLACKLIST.SUCCESS(target)
                 )
