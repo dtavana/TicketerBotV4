@@ -47,6 +47,7 @@ export default class TicketerBotClient extends AkairoClient {
         defaultCooldown: 3000,
         ignoreCooldown: CLIENT_OPTIONS.OWNERS,
         ignorePermissions: CLIENT_OPTIONS.OWNERS,
+        automateCategories: true,
         argumentDefaults: {
             prompt: {
                 modifyStart: (_, str) =>
@@ -73,7 +74,6 @@ export default class TicketerBotClient extends AkairoClient {
 
     public async start() {
         await this.login(process.env.BOT_TOKEN);
-        this.settings.setClient(this);
         await this._init();
     }
 
@@ -97,11 +97,6 @@ export default class TicketerBotClient extends AkairoClient {
         });
         this.listenerHandler.loadAll();
         this.logger.info(MESSAGES.LISTENER_HANDLER.LOADED, {
-            topic: TOPICS.DISCORD_AKAIRO,
-            event: EVENTS.INIT
-        });
-        await this.settings.init();
-        this.logger.info(MESSAGES.SETTINGS_MANAGER.LOADED, {
             topic: TOPICS.DISCORD_AKAIRO,
             event: EVENTS.INIT
         });

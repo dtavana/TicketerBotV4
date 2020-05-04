@@ -19,5 +19,11 @@ export default class ReadyListener extends Listener {
             MESSAGES.EVENTS.READY.ACTIVITY(this.client.guilds.cache.size),
             { type: "WATCHING" }
         );
+        this.client.settings.setClient(this.client);
+        await this.client.settings.init();
+        this.client.logger.info(MESSAGES.SETTINGS_MANAGER.LOADED, {
+            topic: TOPICS.DISCORD_AKAIRO,
+            event: EVENTS.INIT
+        });
     }
 }
