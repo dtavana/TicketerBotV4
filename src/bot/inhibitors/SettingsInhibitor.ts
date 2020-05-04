@@ -12,16 +12,13 @@ export default class SettingsInhibitor extends Inhibitor {
 
     public exec(message: Message, command: Command) {
         if (!message.guild) return false;
-        console.log(2);
         if (command.categoryID !== COMMAND_CATEGORIES.CONFIG) {
             return false;
         }
-        console.log(2);
         const hasPermission = message.member?.hasPermission(
             SETTINGS_PERMISSION,
             { checkAdmin: true, checkOwner: true }
         );
-        console.log(2);
         return !hasPermission;
     }
 }
