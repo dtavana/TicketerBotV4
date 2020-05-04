@@ -19,7 +19,17 @@ export default class UnblacklistCommand extends Command {
             args: [
                 {
                     id: "target",
-                    type: "user"
+                    type: "user",
+                    prompt: {
+                        start: (message: Message) =>
+                            MESSAGES.COMMANDS.MODERATION.UNBLACKLIST.PROMPT.START(
+                                message.author
+                            ),
+                        retry: (message: Message) =>
+                            MESSAGES.COMMANDS.MODERATION.UNBLACKLIST.PROMPT.RETRY(
+                                message.author
+                            )
+                    }
                 }
             ]
         });

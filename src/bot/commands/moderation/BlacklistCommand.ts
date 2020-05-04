@@ -19,13 +19,28 @@ export default class BlacklistCommand extends Command {
             args: [
                 {
                     id: "target",
-                    type: "user"
+                    type: "user",
+                    prompt: {
+                        start: (message: Message) =>
+                            MESSAGES.COMMANDS.MODERATION.BLACKLIST.PROMPT.START(
+                                message.author
+                            ),
+                        retry: (message: Message) =>
+                            MESSAGES.COMMANDS.MODERATION.BLACKLIST.PROMPT.RETRY(
+                                message.author
+                            )
+                    }
                 }
             ]
         });
     }
 
     public async exec(message: Message, { target }: { target: User }) {
+        if (target.bot) {
+            return await EMBEDS.FAILURE().setDescription(
+                MESSAGES.COMMANDS.MODERATION.BLACKLIST.NOBOT()
+            );
+        }
         const blacklist: string[] = this.client.settings.get(
             message.guild,
             SETTINGS.BLACKLIST,

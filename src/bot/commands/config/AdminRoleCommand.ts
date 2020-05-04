@@ -19,7 +19,17 @@ export default class AdminRoleCommand extends Command {
             args: [
                 {
                     id: "target",
-                    type: "role"
+                    type: "role",
+                    prompt: {
+                        start: (message: Message) =>
+                            MESSAGES.COMMANDS.CONFIG.ADMINROLE.PROMPT.START(
+                                message.author
+                            ),
+                        retry: (message: Message) =>
+                            MESSAGES.COMMANDS.CONFIG.ADMINROLE.PROMPT.RETRY(
+                                message.author
+                            )
+                    }
                 }
             ]
         });

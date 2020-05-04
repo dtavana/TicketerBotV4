@@ -5,7 +5,12 @@ import {
     ListenerHandler
 } from "discord-akairo";
 import { join } from "path";
-import { MESSAGES, CLIENT_OPTIONS, SETTINGS } from "../../lib/constants";
+import {
+    MESSAGES,
+    CLIENT_OPTIONS,
+    SETTINGS,
+    EMBEDS
+} from "../../lib/constants";
 import SettingsManager from "../managers/SettingsManager";
 import GuildSettings from "../../models/GuildSettings";
 import { Logger } from "winston";
@@ -50,10 +55,8 @@ export default class TicketerBotClient extends AkairoClient {
         automateCategories: true,
         argumentDefaults: {
             prompt: {
-                modifyStart: (_, str) =>
-                    MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_START(str),
-                modifyRetry: (_, str) =>
-                    MESSAGES.COMMAND_HANDLER.PROMPT.MODIFY_RETRY(str),
+                modifyStart: (_, str) => EMBEDS.PROMPT(str),
+                modifyRetry: (_, str) => EMBEDS.PROMPT(str),
                 timeout: MESSAGES.COMMAND_HANDLER.PROMPT.TIMEOUT,
                 ended: MESSAGES.COMMAND_HANDLER.PROMPT.ENDED,
                 cancel: MESSAGES.COMMAND_HANDLER.PROMPT.CANCEL
