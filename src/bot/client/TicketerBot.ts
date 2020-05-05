@@ -40,9 +40,9 @@ export default class TicketerBotClient extends AkairoClient {
 
     public commandHandler: CommandHandler = new CommandHandler(this, {
         directory: join(__dirname, "..", "commands"),
-        prefix: async (message: Message): Promise<string> =>
-            await this.settings.get(
-                message.guild,
+        prefix: (message: Message): string =>
+            this.settings.get(
+                message.guild!,
                 SETTINGS.PREFIX,
                 CLIENT_OPTIONS.DEFAULT_PREFIX
             ),

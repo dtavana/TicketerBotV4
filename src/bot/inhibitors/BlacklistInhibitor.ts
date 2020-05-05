@@ -14,7 +14,7 @@ export default class BlacklistInhibitor extends Inhibitor {
             return false;
         }
         const blacklist = this.client.settings.get(
-            message.guild,
+            message.guild!,
             SETTINGS.BLACKLIST,
             [""]
         );

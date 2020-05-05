@@ -37,7 +37,7 @@ export default class UnblacklistCommand extends Command {
 
     public async exec(message: Message, { target }: { target: User }) {
         let blacklist: string[] = this.client.settings.get(
-            message.guild,
+            message.guild!,
             SETTINGS.BLACKLIST,
             []
         );
@@ -51,11 +51,11 @@ export default class UnblacklistCommand extends Command {
             blacklist = blacklist.filter((el) => el !== target.id);
             blacklist.length === 0
                 ? await this.client.settings.delete(
-                      message.guild,
+                      message.guild!,
                       SETTINGS.BLACKLIST
                   )
                 : await this.client.settings.set(
-                      message.guild,
+                      message.guild!,
                       SETTINGS.BLACKLIST,
                       blacklist
                   );

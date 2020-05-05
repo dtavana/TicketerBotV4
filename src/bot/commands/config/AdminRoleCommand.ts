@@ -40,7 +40,7 @@ export default class AdminRoleCommand extends Command {
             | string
             | Role
             | undefined = await this.client.settings.set(
-            message.guild,
+            message.guild!,
             SETTINGS.ADMINROLE,
             target.id
         );

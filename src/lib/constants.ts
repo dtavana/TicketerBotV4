@@ -2,12 +2,19 @@ import { MessageEmbed } from "discord.js";
 import { AkairoClient } from "discord-akairo";
 import { User, Role } from "discord.js";
 
-export const SETTINGS = {
-    GUILDID: "guildId",
-    PREFIX: "prefix",
-    BLACKLIST: "blacklist",
-    ADMINROLE: "adminRole"
-};
+export enum SETTINGS {
+    GUILDID = "GUILDID",
+    PREFIX = "PREFIX",
+    BLACKLIST = "BLACKLIST",
+    ADMINROLE = "ADMINROLE"
+}
+
+export interface Settings {
+    GUILDID: string;
+    PREFIX: string;
+    BLACKLIST: string[];
+    ADMINROLE: string;
+}
 
 export const EMBEDS = {
     SUCCESS: () => {

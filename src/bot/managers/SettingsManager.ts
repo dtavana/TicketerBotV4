@@ -1,19 +1,19 @@
-import { Mongoose, Model, Document } from "mongoose";
+import { Mongoose } from "mongoose";
 import mongoClient from "../../utils/mongoClient";
 import { Provider } from "discord-akairo";
 import GuildSettings from "../../models/GuildSettings";
 import { Guild } from "discord.js";
 import { AkairoClient } from "discord-akairo";
-import { CLIENT_OPTIONS, SETTINGS } from "../../lib/constants";
+import { CLIENT_OPTIONS, SETTINGS, Settings } from "../../lib/constants";
 
 export default class SettingsManager extends Provider {
     public ["constructor"]: typeof SettingsManager;
 
     public db!: Mongoose;
     private client!: AkairoClient;
-    private model!: Model<Document>;
+    private model!: typeof GuildSettings;
 
-    public constructor(model: Model<Document>) {
+    public constructor(model: typeof GuildSettings) {
         super();
         this.model = model;
         this.setDatabase().then();
@@ -47,7 +47,7 @@ export default class SettingsManager extends Provider {
      * @param {Guild | string} guild The guild to delete the key from
      * @param {string} key The key to delete
      */
-    public async delete(guild: Guild | string | null, key: string) {
+    public async delete(guild: Guild | string, key: string) {
         const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return false;
@@ -76,21 +76,18 @@ export default class SettingsManager extends Provider {
      * @param {string} key The key to delete
      * @param {unknown} defaultValue The default value to return if the `guild`, `key` are invalid or if the document can not be found
      */
-    public get(
-        guild: Guild | string | null,
-        key: string,
-        defaultValue?: unknown
-    ) {
+    public get<K extends keyof Settings, T = undefined>(
+        guild: Guild | string,
+        key: K,
+        defaultValue?: T
+    ): Settings[K] | T {
         const guildId = this.constructor.getGuildId(guild);
-        if (guildId == null) {
-            return defaultValue;
+        if (this.items.has(guildId)) {
+            const value = this.items.get(guildId)[key];
+            return value ?? defaultValue;
         }
-        const guildSettings = this.items.get(guildId);
-        if (guildSettings === undefined) {
-            return defaultValue;
-        }
-        if (guildSettings[key] === undefined) return defaultValue;
-        return guildSettings[key];
+
+        return defaultValue as T;
     }
 
     /**
@@ -99,11 +96,7 @@ export default class SettingsManager extends Provider {
      * @param {string} key The key to delete
      * @param {unknown} value The value to set `key` to
      */
-    public async set(
-        guild: Guild | string | null,
-        key: string,
-        value: unknown
-    ) {
+    public async set(guild: Guild | string, key: string, value: unknown) {
         const guildId = this.constructor.getGuildId(guild);
         if (guildId == null) {
             return undefined;
@@ -152,8 +145,7 @@ export default class SettingsManager extends Provider {
         }
     }
 
-    private static getGuildId(guild: Guild | string | null) {
-        if (guild === null) return null;
+    private static getGuildId(guild: Guild | string): string {
         if (guild instanceof Guild) return guild.id;
         if (guild === "global" || guild === null) return "0";
         if (typeof guild === "string" && /^\d+$/.test(guild)) return guild;

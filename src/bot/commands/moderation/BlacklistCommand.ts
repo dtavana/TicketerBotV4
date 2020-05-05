@@ -37,12 +37,14 @@ export default class BlacklistCommand extends Command {
 
     public async exec(message: Message, { target }: { target: User }) {
         if (target.bot) {
-            return await EMBEDS.FAILURE().setDescription(
-                MESSAGES.COMMANDS.MODERATION.BLACKLIST.NOBOT()
+            return await message.util?.send(
+                EMBEDS.FAILURE().setDescription(
+                    MESSAGES.COMMANDS.MODERATION.BLACKLIST.NOBOT()
+                )
             );
         }
         const blacklist: string[] = this.client.settings.get(
-            message.guild,
+            message.guild!,
             SETTINGS.BLACKLIST,
             []
         );
@@ -55,7 +57,7 @@ export default class BlacklistCommand extends Command {
         } else {
             blacklist.push(target.id);
             await this.client.settings.set(
-                message.guild,
+                message.guild!,
                 SETTINGS.BLACKLIST,
                 blacklist
             );
