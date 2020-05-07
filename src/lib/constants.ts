@@ -106,6 +106,17 @@ export const MESSAGES = {
             LOG: (client: AkairoClient) =>
                 `Now logged in as ${client.user?.tag} (${client.user?.id}). Serving ${client.users.cache.size} users.`,
             ACTIVITY: (guildCount: number) => `${guildCount} servers`
+        },
+        SHARD_DISCONNECT: {
+            LOG: (code: any) =>
+                `Hmm, I have to hide the fact I was defeated... I'll let you go this time! (${code})`
+        },
+        SHARD_RECONNECT: {
+            LOG: "Come at me if you don't value your life!"
+        },
+        SHARD_RESUME: {
+            LOG:
+                "You made it out fine thanks to my luck! You ought to be thankful!"
         }
     },
     INHIBITOR_HANDLER: {
