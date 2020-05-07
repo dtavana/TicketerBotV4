@@ -1,6 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { AkairoClient } from "discord-akairo";
-import { User, Role } from "discord.js";
+import { User } from "discord.js";
 
 export enum SETTINGS {
     GUILDID = "GUILDID",
