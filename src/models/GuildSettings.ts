@@ -1,4 +1,5 @@
 import { prop, getModelForClass, arrayProp } from "@typegoose/typegoose";
+import { DEFAULT_SETTINGS } from "../lib/constants";
 
 class GuildSettings {
     @prop({ unique: true })
@@ -15,6 +16,9 @@ class GuildSettings {
 
     @prop()
     moderatorRole?: string;
+
+    @prop({ default: DEFAULT_SETTINGS.DEFAULT_TICKET_PREFIX })
+    ticketPrefix?: string;
 }
 
 export default getModelForClass(GuildSettings);

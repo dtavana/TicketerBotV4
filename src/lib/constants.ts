@@ -7,7 +7,8 @@ export enum SETTINGS {
     PREFIX = "PREFIX",
     BLACKLIST = "BLACKLIST",
     ADMINROLE = "ADMINROLE",
-    MODERATORROLE = "MODERATORROLE"
+    MODERATORROLE = "MODERATORROLE",
+    TICKETPREFIX = "TICKETPREFIX"
 }
 
 export interface Settings {
@@ -16,6 +17,7 @@ export interface Settings {
     BLACKLIST: string[];
     ADMINROLE: string;
     MODERATORROLE: string;
+    TICKETPREFIX: string;
 }
 
 export const EMBEDS = {
@@ -49,7 +51,8 @@ export const COMMAND_NAMES = {
     CONFIG: {
         SETUP: "setup",
         ADMINROLE: "adminrole",
-        MODERATORROLE: "moderatorrole"
+        MODERATORROLE: "moderatorrole",
+        TICKETPREFIX: "ticketprefix"
     }
 };
 
@@ -103,6 +106,16 @@ export const MESSAGES = {
                 },
                 SUCCESS: (old: Role | string, target: Role) =>
                     `Old Moderator Role: ${old}\nNew Moderator Role: ${target}`
+            },
+            TICKETPREFIX: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, what would you like to set as the ticket prefix?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please type a string less than 10 characters.`
+                },
+                SUCCESS: (old: string, target: string) =>
+                    `Old Ticket Prefix: ${old}\nNew Ticket Prefix: ${target}`
             }
         }
     },
@@ -145,6 +158,10 @@ export const MESSAGES = {
 
 export const SETTINGS_PERMISSION = "MANAGE_GUILD";
 
+export const DEFAULT_SETTINGS = {
+    DEFAULT_TICKET_PREFIX: "ticket"
+};
+
 export const COMMAND_CATEGORIES = {
     MODERATION: "moderation",
     CONFIG: "config"
@@ -159,7 +176,8 @@ export const COMMAND_DESCRIPTIONS = {
     },
     CONFIG: {
         ADMINROLE: "Use this command to set the administrator role",
-        MODERATORROLE: "Use this command to set the moderator role"
+        MODERATORROLE: "Use this command to set the moderator role",
+        TICKETPREFIX: "Use this command to set the ticket prefix"
     }
 };
 
