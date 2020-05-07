@@ -13,7 +13,7 @@ import { Argument } from "discord-akairo";
 export default class TicketPrefixCommand extends Command {
     public constructor() {
         super(COMMAND_NAMES.CONFIG.TICKETPREFIX, {
-            aliases: [COMMAND_NAMES.CONFIG.TICKETPREFIX, "set-ticketer-role"],
+            aliases: [COMMAND_NAMES.CONFIG.TICKETPREFIX, "set-ticket-prefix"],
             category: COMMAND_CATEGORIES.CONFIG,
             description: COMMAND_DESCRIPTIONS.CONFIG.TICKETPREFIX,
             channel: "guild",
