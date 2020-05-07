@@ -3,22 +3,22 @@ import { DEFAULT_SETTINGS } from "../lib/constants";
 
 class GuildSettings {
     @prop({ unique: true })
-    guildId!: string;
+    GUILDID!: string;
 
     @prop()
-    prefix?: string;
+    PREFIX?: string;
 
     @arrayProp({ items: String })
-    blacklist?: string[];
+    BLACKLIST?: string[];
 
     @prop()
-    adminRole?: string;
+    ADMINROLE?: string;
 
     @prop()
-    moderatorRole?: string;
+    MODERATORROLE?: string;
 
     @prop({ default: DEFAULT_SETTINGS.DEFAULT_TICKET_PREFIX })
-    ticketPrefix?: string;
+    TICKETPREFIX?: string;
 }
 
 export default getModelForClass(GuildSettings);

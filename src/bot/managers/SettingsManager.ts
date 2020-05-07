@@ -44,9 +44,9 @@ export default class SettingsManager extends Provider {
         key: K,
         defaultValue?: T
     ): Settings[K] | T {
-        const guildId = this.constructor.getGuildId(guild);
-        if (this.items.has(guildId)) {
-            const value = this.items.get(guildId)[key];
+        const GUILDID = this.constructor.getGuildId(guild);
+        if (this.items.has(GUILDID)) {
+            const value = this.items.get(GUILDID)[key];
             return value ?? defaultValue;
         }
 
@@ -60,23 +60,25 @@ export default class SettingsManager extends Provider {
      * @param {unknown} value The value to set `key` to
      */
     public async set(guild: Guild | string, key: string, value: unknown) {
-        const guildId = this.constructor.getGuildId(guild);
-        if (guildId == null) {
+        const GUILDID = this.constructor.getGuildId(guild);
+        if (GUILDID == null) {
             return undefined;
         }
         let previousValue = undefined;
-        const document = await this.model.findOne({ guildId });
+        const document = await this.model.findOne({ GUILDID });
         if (document != null) {
             previousValue = document[key];
             document[key] = value;
             await document.save();
-            this.items.get(guildId)[key] = value;
+            this.items.get(GUILDID)[key] = value;
         } else {
-            await this.model.create({ guildId, key: value });
-            this.items.set(guildId, { key: value });
+            const newDocument = await this.model.create({ GUILDID });
+            newDocument[key] = value;
+            await newDocument.save();
+            this.items.set(GUILDID, newDocument.toObject());
         }
         if (key === SETTINGS.PREFIX)
-            this.setGuildPrefix(guildId, value as string);
+            this.setGuildPrefix(GUILDID, value as string);
         return previousValue;
     }
 
@@ -86,23 +88,23 @@ export default class SettingsManager extends Provider {
      * @param {string} key The key to delete
      */
     public async delete(guild: Guild | string, key: string) {
-        const guildId = this.constructor.getGuildId(guild);
-        if (guildId == null) {
+        const GUILDID = this.constructor.getGuildId(guild);
+        if (GUILDID == null) {
             return false;
         }
-        const document = await this.model.findOne({ guildId });
+        const document = await this.model.findOne({ GUILDID });
         if (document != null) {
             const previousValue = document[key];
             document[key] = undefined;
             await document.save();
-            this.items.delete(guildId);
+            this.items.delete(GUILDID);
             const newGuildSettings = await GuildSettings.findOne(
-                { guildId },
+                { GUILDID },
                 { _id: 0, __v: 0 }
             );
-            this.items.set(guildId, newGuildSettings);
+            this.items.set(GUILDID, newGuildSettings);
             if (key === SETTINGS.PREFIX)
-                this.setGuildPrefix(guildId, CLIENT_OPTIONS.DEFAULT_PREFIX);
+                this.setGuildPrefix(GUILDID, CLIENT_OPTIONS.DEFAULT_PREFIX);
             return previousValue;
         }
         return false;
@@ -113,14 +115,14 @@ export default class SettingsManager extends Provider {
      * @param {Guild | string} guild The guild to clear settings from
      */
     public async clear(guild: Guild | string) {
-        const guildId = this.constructor.getGuildId(guild);
-        if (guildId == null) {
+        const GUILDID = this.constructor.getGuildId(guild);
+        if (GUILDID == null) {
             return false;
         }
-        await this.model.deleteOne({ guildId });
-        this.items.delete(guildId);
-        this.setGuildPrefix(guildId, CLIENT_OPTIONS.DEFAULT_PREFIX);
-        return guildId;
+        await this.model.deleteOne({ GUILDID });
+        this.items.delete(GUILDID);
+        this.setGuildPrefix(GUILDID, CLIENT_OPTIONS.DEFAULT_PREFIX);
+        return GUILDID;
     }
 
     public async init() {
@@ -129,8 +131,8 @@ export default class SettingsManager extends Provider {
             { _id: 0, __v: 0 }
         );
         allGuildSettings.forEach((guildSetting) => {
-            this.items.set(guildSetting.guildId, guildSetting);
-            this.setGuildPrefix(guildSetting.guildId, guildSetting.prefix);
+            this.items.set(guildSetting.GUILDID, guildSetting);
+            this.setGuildPrefix(guildSetting.GUILDID, guildSetting.PREFIX);
         });
         this.client.logger.info(MESSAGES.SETTINGS_MANAGER.LOADED, {
             topic: TOPICS.DISCORD_AKAIRO,
