@@ -4,7 +4,13 @@ import { Provider } from "discord-akairo";
 import GuildSettings from "../../models/GuildSettings";
 import { Guild } from "discord.js";
 import { AkairoClient } from "discord-akairo";
-import { CLIENT_OPTIONS, SETTINGS, Settings } from "../../lib/constants";
+import { TOPICS, EVENTS } from "../../utils/logger";
+import {
+    CLIENT_OPTIONS,
+    SETTINGS,
+    Settings,
+    MESSAGES
+} from "../../lib/constants";
 
 export default class SettingsManager extends Provider {
     public ["constructor"]: typeof SettingsManager;
@@ -25,49 +31,6 @@ export default class SettingsManager extends Provider {
 
     public setClient(client: AkairoClient) {
         this.client = client;
-    }
-
-    /**
-     * Returns `false` if `guild` was invalid, otherwise returns the ID of the `guild` that was passed in
-     * @param {Guild | string} guild The guild to clear settings from
-     */
-    public async clear(guild: Guild | string) {
-        const guildId = this.constructor.getGuildId(guild);
-        if (guildId == null) {
-            return false;
-        }
-        await this.model.deleteOne({ guildId });
-        this.items.delete(guildId);
-        this.setGuildPrefix(guildId, CLIENT_OPTIONS.DEFAULT_PREFIX);
-        return guildId;
-    }
-
-    /**
-     * Returns `false` if `guild` was invalid or if a document is not found, otherwise returns the value of the deleted key before deletion
-     * @param {Guild | string} guild The guild to delete the key from
-     * @param {string} key The key to delete
-     */
-    public async delete(guild: Guild | string, key: string) {
-        const guildId = this.constructor.getGuildId(guild);
-        if (guildId == null) {
-            return false;
-        }
-        const document = await this.model.findOne({ guildId });
-        if (document != null) {
-            const previousValue = document[key];
-            document[key] = undefined;
-            await document.save();
-            this.items.delete(guildId);
-            const newGuildSettings = await GuildSettings.findOne(
-                { guildId },
-                { _id: 0, __v: 0 }
-            );
-            this.items.set(guildId, newGuildSettings);
-            if (key === SETTINGS.PREFIX)
-                this.setGuildPrefix(guildId, CLIENT_OPTIONS.DEFAULT_PREFIX);
-            return previousValue;
-        }
-        return false;
     }
 
     /**
@@ -117,15 +80,61 @@ export default class SettingsManager extends Provider {
         return previousValue;
     }
 
+    /**
+     * Returns `false` if `guild` was invalid or if a document is not found, otherwise returns the value of the deleted key before deletion
+     * @param {Guild | string} guild The guild to delete the key from
+     * @param {string} key The key to delete
+     */
+    public async delete(guild: Guild | string, key: string) {
+        const guildId = this.constructor.getGuildId(guild);
+        if (guildId == null) {
+            return false;
+        }
+        const document = await this.model.findOne({ guildId });
+        if (document != null) {
+            const previousValue = document[key];
+            document[key] = undefined;
+            await document.save();
+            this.items.delete(guildId);
+            const newGuildSettings = await GuildSettings.findOne(
+                { guildId },
+                { _id: 0, __v: 0 }
+            );
+            this.items.set(guildId, newGuildSettings);
+            if (key === SETTINGS.PREFIX)
+                this.setGuildPrefix(guildId, CLIENT_OPTIONS.DEFAULT_PREFIX);
+            return previousValue;
+        }
+        return false;
+    }
+
+    /**
+     * Returns `false` if `guild` was invalid, otherwise returns the ID of the `guild` that was passed in
+     * @param {Guild | string} guild The guild to clear settings from
+     */
+    public async clear(guild: Guild | string) {
+        const guildId = this.constructor.getGuildId(guild);
+        if (guildId == null) {
+            return false;
+        }
+        await this.model.deleteOne({ guildId });
+        this.items.delete(guildId);
+        this.setGuildPrefix(guildId, CLIENT_OPTIONS.DEFAULT_PREFIX);
+        return guildId;
+    }
+
     public async init() {
         const allGuildSettings = await GuildSettings.find(
             {},
             { _id: 0, __v: 0 }
         );
-
         allGuildSettings.forEach((guildSetting) => {
             this.items.set(guildSetting.guildId, guildSetting);
             this.setGuildPrefix(guildSetting.guildId, guildSetting.prefix);
+        });
+        this.client.logger.info(MESSAGES.SETTINGS_MANAGER.LOADED, {
+            topic: TOPICS.DISCORD_AKAIRO,
+            event: EVENTS.INIT
         });
     }
 

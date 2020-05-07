@@ -21,9 +21,5 @@ export default class ReadyListener extends Listener {
         );
         this.client.settings.setClient(this.client);
         await this.client.settings.init();
-        this.client.logger.info(MESSAGES.SETTINGS_MANAGER.LOADED, {
-            topic: TOPICS.DISCORD_AKAIRO,
-            event: EVENTS.INIT
-        });
     }
 }
