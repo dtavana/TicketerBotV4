@@ -29,7 +29,7 @@ const logger = createLogger({
     format: format.combine(
         format.errors({ stack: true }),
         format.label({ label: "BOT" }),
-        format.timestamp({ format: "DD/MM/YYYY HH:mm:ss" }),
+        format.timestamp({ format: "MM/DD/YYYY HH:mm:ss" }),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         format.printf((info: any): string => {
             const {
