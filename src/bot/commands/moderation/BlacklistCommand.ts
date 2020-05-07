@@ -16,6 +16,7 @@ export default class BlacklistCommand extends Command {
             aliases: [COMMAND_NAMES.MODERATION.BLACKLIST],
             category: COMMAND_CATEGORIES.MODERATION,
             description: COMMAND_DESCRIPTIONS.MODERATION.BLACKLIST,
+            channel: "guild",
             args: [
                 {
                     id: "target",
@@ -61,7 +62,7 @@ export default class BlacklistCommand extends Command {
                 SETTINGS.BLACKLIST,
                 blacklist
             );
-            return await message.util?.send(
+            return message.util?.send(
                 EMBEDS.SUCCESS().setDescription(
                     MESSAGES.COMMANDS.MODERATION.BLACKLIST.SUCCESS(target)
                 )

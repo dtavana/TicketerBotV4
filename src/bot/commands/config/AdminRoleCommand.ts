@@ -16,6 +16,7 @@ export default class AdminRoleCommand extends Command {
             aliases: [COMMAND_NAMES.CONFIG.ADMINROLE, "set-admin-role"],
             category: COMMAND_CATEGORIES.CONFIG,
             description: COMMAND_DESCRIPTIONS.CONFIG.ADMINROLE,
+            channel: "guild",
             args: [
                 {
                     id: "target",
@@ -52,7 +53,7 @@ export default class AdminRoleCommand extends Command {
                 adminRole = MESSAGES.COMMANDS.CONFIG.NOTSET;
             }
         }
-        await message.util?.send(
+        return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
                 MESSAGES.COMMANDS.CONFIG.ADMINROLE.SUCCESS(adminRole, target)
             )

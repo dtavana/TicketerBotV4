@@ -16,6 +16,7 @@ export default class ModeratorRoleCommand extends Command {
             aliases: [COMMAND_NAMES.CONFIG.MODERATORROLE, "set-moderator-role"],
             category: COMMAND_CATEGORIES.CONFIG,
             description: COMMAND_DESCRIPTIONS.CONFIG.MODERATORROLE,
+            channel: "guild",
             args: [
                 {
                     id: "target",
@@ -52,7 +53,7 @@ export default class ModeratorRoleCommand extends Command {
                 moderatorRole = MESSAGES.COMMANDS.CONFIG.NOTSET;
             }
         }
-        await message.util?.send(
+        return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
                 MESSAGES.COMMANDS.CONFIG.MODERATORROLE.SUCCESS(
                     moderatorRole,
