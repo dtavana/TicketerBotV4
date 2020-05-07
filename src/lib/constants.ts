@@ -115,7 +115,7 @@ export const MESSAGES = {
                         `${author}, please type a string less than 10 characters.`
                 },
                 SUCCESS: (old: string, target: string) =>
-                    `Old Ticket Prefix: ${old}\nNew Ticket Prefix: ${target}`
+                    `Old Ticket Prefix: \`${old}\`\nNew Ticket Prefix: \`${target}\``
             }
         }
     },
