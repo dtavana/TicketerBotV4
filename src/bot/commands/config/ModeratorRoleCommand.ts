@@ -37,10 +37,7 @@ export default class ModeratorRoleCommand extends Command {
     }
 
     public async exec(message: Message, { target }: { target: Role }) {
-        let moderatorRole:
-            | string
-            | Role
-            | undefined = await this.client.settings.set(
+        let moderatorRole: string | undefined = await this.client.settings.set(
             message.guild!,
             SETTINGS.MODERATORROLE,
             target.id
@@ -48,16 +45,20 @@ export default class ModeratorRoleCommand extends Command {
         if (moderatorRole === undefined) {
             moderatorRole = MESSAGES.COMMANDS.CONFIG.NOTSET;
         } else {
-            moderatorRole = message.guild?.roles.cache.get(moderatorRole);
-            if (!moderatorRole) {
+            const moderatorRoleResolved = message.guild?.roles.cache.get(
+                moderatorRole
+            );
+            if (!moderatorRoleResolved) {
                 moderatorRole = MESSAGES.COMMANDS.CONFIG.NOTSET;
+            } else {
+                moderatorRole = moderatorRoleResolved.toString();
             }
         }
         return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
                 MESSAGES.COMMANDS.CONFIG.MODERATORROLE.SUCCESS(
                     moderatorRole,
-                    target
+                    target.toString()
                 )
             )
         );

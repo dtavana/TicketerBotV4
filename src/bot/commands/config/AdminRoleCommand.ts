@@ -37,10 +37,7 @@ export default class AdminRoleCommand extends Command {
     }
 
     public async exec(message: Message, { target }: { target: Role }) {
-        let adminRole:
-            | string
-            | Role
-            | undefined = await this.client.settings.set(
+        let adminRole: string | undefined = await this.client.settings.set(
             message.guild!,
             SETTINGS.ADMINROLE,
             target.id
@@ -48,14 +45,19 @@ export default class AdminRoleCommand extends Command {
         if (adminRole === undefined) {
             adminRole = MESSAGES.COMMANDS.CONFIG.NOTSET;
         } else {
-            adminRole = message.guild?.roles.cache.get(adminRole);
-            if (!adminRole) {
+            const adminRoleResolved = message.guild?.roles.cache.get(adminRole);
+            if (!adminRoleResolved) {
                 adminRole = MESSAGES.COMMANDS.CONFIG.NOTSET;
+            } else {
+                adminRole = adminRoleResolved.toString();
             }
         }
         return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
-                MESSAGES.COMMANDS.CONFIG.ADMINROLE.SUCCESS(adminRole, target)
+                MESSAGES.COMMANDS.CONFIG.ADMINROLE.SUCCESS(
+                    adminRole,
+                    target.toString()
+                )
             )
         );
     }

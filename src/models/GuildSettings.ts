@@ -1,7 +1,7 @@
 import { prop, getModelForClass, arrayProp } from "@typegoose/typegoose";
 import { DEFAULT_SETTINGS } from "../lib/constants";
 
-class GuildSettings {
+export class GuildSettingsClass {
     @prop({ unique: true })
     GUILDID!: string;
 
@@ -21,4 +21,4 @@ class GuildSettings {
     TICKETPREFIX?: string;
 }
 
-export default getModelForClass(GuildSettings);
+export default getModelForClass(GuildSettingsClass);

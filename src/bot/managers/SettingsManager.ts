@@ -1,7 +1,7 @@
 import { Mongoose } from "mongoose";
 import mongoClient from "../../utils/mongoClient";
 import { Provider } from "discord-akairo";
-import GuildSettings from "../../models/GuildSettings";
+import GuildSettings, { GuildSettingsClass } from "../../models/GuildSettings";
 import { Guild } from "discord.js";
 import { AkairoClient } from "discord-akairo";
 import { TOPICS, EVENTS } from "../../utils/logger";
@@ -11,6 +11,7 @@ import {
     Settings,
     MESSAGES
 } from "../../lib/constants";
+import { DocumentType } from "@typegoose/typegoose";
 
 export default class SettingsManager extends Provider {
     public ["constructor"]: typeof SettingsManager;
@@ -38,6 +39,7 @@ export default class SettingsManager extends Provider {
      * @param {Guild | string} guild The guild to delete the key from
      * @param {string} key The key to delete
      * @param {unknown} defaultValue The default value to return if the `guild`, `key` are invalid or if the document can not be found
+     * @template K A valid settings key
      */
     public get<K extends keyof Settings, T = undefined>(
         guild: Guild | string,
@@ -58,28 +60,39 @@ export default class SettingsManager extends Provider {
      * @param {Guild | string} guild The guild to delete the key from
      * @param {string} key The key to delete
      * @param {unknown} value The value to set `key` to
+     * @template K A valid settings key
      */
-    public async set(guild: Guild | string, key: string, value: unknown) {
+    public async set<
+        K extends keyof Settings,
+        T = GuildSettingsClass[K] | undefined
+    >(guild: Guild | string, key: K, value: GuildSettingsClass[K]): Promise<T> {
         const GUILDID = this.constructor.getGuildId(guild);
         if (GUILDID == null) {
-            return undefined;
+            return (undefined as unknown) as T;
         }
-        let previousValue = undefined;
-        const document = await this.model.findOne({ GUILDID });
+        let previousValue: unknown;
+        const document: GuildSettingsClass | null = await this.model.findOne({
+            GUILDID
+        });
         if (document != null) {
             previousValue = document[key];
             document[key] = value;
-            await document.save();
+            await (document as DocumentType<GuildSettingsClass>).save();
             this.items.get(GUILDID)[key] = value;
         } else {
-            const newDocument = await this.model.create({ GUILDID });
+            const newDocument: GuildSettingsClass = await this.model.create({
+                GUILDID
+            });
             newDocument[key] = value;
-            await newDocument.save();
-            this.items.set(GUILDID, newDocument.toObject());
+            await (newDocument as DocumentType<GuildSettingsClass>).save();
+            this.items.set(
+                GUILDID,
+                (newDocument as DocumentType<GuildSettingsClass>).toObject()
+            );
         }
         if (key === SETTINGS.PREFIX)
             this.setGuildPrefix(GUILDID, value as string);
-        return previousValue;
+        return previousValue as T;
     }
 
     /**

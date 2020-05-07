@@ -94,7 +94,7 @@ export const MESSAGES = {
                     RETRY: (author?: User) =>
                         `${author}, please mention a role.`
                 },
-                SUCCESS: (old: Role | string, target: Role) =>
+                SUCCESS: (old: string, target: string) =>
                     `Old Admin Role: ${old}\nNew Admin Role: ${target}`
             },
             MODERATORROLE: {
@@ -104,7 +104,7 @@ export const MESSAGES = {
                     RETRY: (author?: User) =>
                         `${author}, please mention a role.`
                 },
-                SUCCESS: (old: Role | string, target: Role) =>
+                SUCCESS: (old: string, target: string) =>
                     `Old Moderator Role: ${old}\nNew Moderator Role: ${target}`
             },
             TICKETPREFIX: {
