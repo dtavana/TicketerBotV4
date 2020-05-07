@@ -6,7 +6,8 @@ export enum SETTINGS {
     GUILDID = "GUILDID",
     PREFIX = "PREFIX",
     BLACKLIST = "BLACKLIST",
-    ADMINROLE = "ADMINROLE"
+    ADMINROLE = "ADMINROLE",
+    MODERATORROLE = "MODERATORROLE"
 }
 
 export interface Settings {
@@ -14,6 +15,7 @@ export interface Settings {
     PREFIX: string;
     BLACKLIST: string[];
     ADMINROLE: string;
+    MODERATORROLE: string;
 }
 
 export const EMBEDS = {
@@ -46,7 +48,8 @@ export const COMMAND_NAMES = {
     },
     CONFIG: {
         SETUP: "setup",
-        ADMINROLE: "adminrole"
+        ADMINROLE: "adminrole",
+        MODERATORROLE: "moderatorrole"
     }
 };
 
@@ -90,6 +93,16 @@ export const MESSAGES = {
                 },
                 SUCCESS: (old: Role | string, target: Role) =>
                     `Old Admin Role: ${old}\nNew Admin Role: ${target}`
+            },
+            MODERATORROLE: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, what role do you want to set as the moderator role?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please mention a role.`
+                },
+                SUCCESS: (old: Role | string, target: Role) =>
+                    `Old Moderator Role: ${old}\nNew Moderator Role: ${target}`
             }
         }
     },
@@ -145,7 +158,8 @@ export const COMMAND_DESCRIPTIONS = {
             "Use this command to remove a user from this servers blacklist"
     },
     CONFIG: {
-        ADMINROLE: "Use this command to set the administrator role"
+        ADMINROLE: "Use this command to set the administrator role",
+        MODERATORROLE: "Use this command to set the moderator role"
     }
 };
 

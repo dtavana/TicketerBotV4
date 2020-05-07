@@ -12,6 +12,9 @@ class GuildSettings {
 
     @prop()
     adminRole?: string;
+
+    @prop()
+    moderatorRole?: string;
 }
 
 export default getModelForClass(GuildSettings);
