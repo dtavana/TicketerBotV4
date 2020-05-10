@@ -5,6 +5,9 @@ export class GuildSettingsClass {
     @prop({ unique: true })
     GUILDID!: string;
 
+    @prop({ default: false })
+    PREMIUM?: boolean;
+
     @prop()
     PREFIX?: string;
 
