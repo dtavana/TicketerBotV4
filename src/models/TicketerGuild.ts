@@ -31,6 +31,9 @@ export class TicketerGuild {
 
     @prop({ default: false })
     ENFORCESUBJECT?: boolean;
+
+    @prop({ default: 120 })
+    INACTIVETIME?: number;
 }
 
 export default getModelForClass(TicketerGuild);
