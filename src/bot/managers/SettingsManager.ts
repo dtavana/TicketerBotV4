@@ -1,7 +1,9 @@
 import { Mongoose } from "mongoose";
 import mongoClient from "../../utils/mongoClient";
 import { Provider } from "discord-akairo";
-import GuildSettings, { GuildSettingsClass } from "../../models/GuildSettings";
+import GuildSettings, {
+    GuildSettings as GuildSettingsClass
+} from "../../models/GuildSettings";
 import { Guild } from "discord.js";
 import { AkairoClient } from "discord-akairo";
 import { TOPICS, EVENTS } from "../../utils/logger";

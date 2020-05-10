@@ -1,7 +1,7 @@
 import { prop, getModelForClass, arrayProp } from "@typegoose/typegoose";
 import { DEFAULT_SETTINGS } from "../lib/constants";
 
-export class GuildSettingsClass {
+export class GuildSettings {
     @prop({ unique: true })
     GUILDID!: string;
 
@@ -27,4 +27,4 @@ export class GuildSettingsClass {
     LOGCHANNEL?: string;
 }
 
-export default getModelForClass(GuildSettingsClass);
+export default getModelForClass(GuildSettings);
