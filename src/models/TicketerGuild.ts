@@ -28,6 +28,9 @@ export class TicketerGuild {
 
     @prop({ default: -1 })
     MAXTICKETS?: number;
+
+    @prop({ default: false })
+    ENFORCESUBJECT?: boolean;
 }
 
 export default getModelForClass(TicketerGuild);
