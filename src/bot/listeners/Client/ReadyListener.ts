@@ -11,6 +11,8 @@ export default class ReadyListener extends Listener {
     }
 
     public async exec() {
+        this.client.settings.setClient(this.client);
+        await this.client.settings.init();
         this.client.logger.info(MESSAGES.EVENTS.READY.LOG(this.client), {
             topic: TOPICS.DISCORD,
             event: EVENTS.READY
@@ -19,7 +21,5 @@ export default class ReadyListener extends Listener {
             MESSAGES.EVENTS.READY.ACTIVITY(this.client.guilds.cache.size),
             { type: "WATCHING" }
         );
-        this.client.settings.setClient(this.client);
-        await this.client.settings.init();
     }
 }
