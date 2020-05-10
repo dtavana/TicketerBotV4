@@ -12,7 +12,7 @@ import {
     EMBEDS
 } from "../../lib/constants";
 import SettingsManager from "../managers/SettingsManager";
-import GuildSettings from "../../models/GuildSettings";
+import TicketerGuild from "../../models/TicketerGuild";
 import { Logger } from "winston";
 import logger, { TOPICS, EVENTS } from "../../utils/logger";
 import { Message } from "discord.js";
@@ -36,7 +36,7 @@ export default class TicketerBotClient extends AkairoClient {
 
     public logger = logger;
 
-    public settings = new SettingsManager(GuildSettings);
+    public settings = new SettingsManager(TicketerGuild);
 
     public commandHandler: CommandHandler = new CommandHandler(this, {
         directory: join(__dirname, "..", "commands"),

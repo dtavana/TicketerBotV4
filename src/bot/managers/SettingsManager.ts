@@ -1,9 +1,9 @@
 import { Mongoose } from "mongoose";
 import mongoClient from "../../utils/mongoClient";
 import { Provider } from "discord-akairo";
-import GuildSettings, {
-    GuildSettings as GuildSettingsClass
-} from "../../models/GuildSettings";
+import TicketerGuild, {
+    TicketerGuild as TicketerGuildClass
+} from "../../models/TicketerGuild";
 import { Guild } from "discord.js";
 import { AkairoClient } from "discord-akairo";
 import { TOPICS, EVENTS } from "../../utils/logger";
@@ -20,9 +20,9 @@ export default class SettingsManager extends Provider {
 
     public db!: Mongoose;
     private client!: AkairoClient;
-    private model!: typeof GuildSettings;
+    private model!: typeof TicketerGuild;
 
-    public constructor(model: typeof GuildSettings) {
+    public constructor(model: typeof TicketerGuild) {
         super();
         this.model = model;
         this.setDatabase().then();
@@ -66,30 +66,30 @@ export default class SettingsManager extends Provider {
      */
     public async set<
         K extends keyof Settings,
-        T = GuildSettingsClass[K] | undefined
-    >(guild: Guild | string, key: K, value: GuildSettingsClass[K]): Promise<T> {
+        T = TicketerGuildClass[K] | undefined
+    >(guild: Guild | string, key: K, value: TicketerGuildClass[K]): Promise<T> {
         const GUILDID = this.constructor.getGuildId(guild);
         if (GUILDID == null) {
             return (undefined as unknown) as T;
         }
         let previousValue: unknown;
-        const document: GuildSettingsClass | null = await this.model.findOne({
+        const document: TicketerGuildClass | null = await this.model.findOne({
             GUILDID
         });
         if (document != null) {
             previousValue = document[key];
             document[key] = value;
-            await (document as DocumentType<GuildSettingsClass>).save();
+            await (document as DocumentType<TicketerGuildClass>).save();
             this.items.get(GUILDID)[key] = value;
         } else {
-            const newDocument: GuildSettingsClass = await this.model.create({
+            const newDocument: TicketerGuildClass = await this.model.create({
                 GUILDID
             });
             newDocument[key] = value;
-            await (newDocument as DocumentType<GuildSettingsClass>).save();
+            await (newDocument as DocumentType<TicketerGuildClass>).save();
             this.items.set(
                 GUILDID,
-                (newDocument as DocumentType<GuildSettingsClass>).toObject()
+                (newDocument as DocumentType<TicketerGuildClass>).toObject()
             );
         }
         if (key === SETTINGS.PREFIX)
@@ -113,7 +113,7 @@ export default class SettingsManager extends Provider {
             document[key] = undefined;
             await document.save();
             this.items.delete(GUILDID);
-            const newGuildSettings = await GuildSettings.findOne(
+            const newGuildSettings = await TicketerGuild.findOne(
                 { GUILDID },
                 { _id: 0, __v: 0 }
             );
@@ -141,7 +141,7 @@ export default class SettingsManager extends Provider {
     }
 
     public async init() {
-        const allGuildSettings = await GuildSettings.find(
+        const allGuildSettings = await TicketerGuild.find(
             {},
             { _id: 0, __v: 0 }
         );
