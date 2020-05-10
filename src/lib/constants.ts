@@ -13,7 +13,8 @@ export enum SETTINGS {
     LOGCHANNEL = "LOGCHANNEL",
     MAXTICKETS = "MAXTICKETS",
     ENFORCESUBJECT = "ENFORCESUBJECT",
-    INACTIVETIME = "INACTIVETIME"
+    INACTIVETIME = "INACTIVETIME",
+    TRANSCRIPT = "TRANSCRIPT"
 }
 
 export interface Settings {
@@ -28,6 +29,7 @@ export interface Settings {
     MAXTICKETS: number;
     ENFORCESUBJECT: boolean;
     INACTIVETIME: number;
+    TRANSCRIPT: boolean;
 }
 
 export const CLIENT_OPTIONS = {
@@ -72,7 +74,8 @@ export const COMMAND_NAMES = {
         LOGCHANNEL: "logchannel",
         MAXTICKETS: "maxtickets",
         ENFORCESUBJECT: "enforcesubject",
-        INACTIVETIME: "inactivetime"
+        INACTIVETIME: "inactivetime",
+        TRANSCRIPT: "transcript"
     },
     INFO: {
         UPGRADE: "upgrade"
@@ -87,7 +90,8 @@ export const PREMIUM_COMMANDS = [
     COMMAND_NAMES.CONFIG.TICKETPREFIX,
     COMMAND_NAMES.CONFIG.MAXTICKETS,
     COMMAND_NAMES.CONFIG.ENFORCESUBJECT,
-    COMMAND_NAMES.CONFIG.INACTIVETIME
+    COMMAND_NAMES.CONFIG.INACTIVETIME,
+    COMMAND_NAMES.CONFIG.TRANSCRIPT
 ];
 
 export const MESSAGES = {
@@ -190,6 +194,16 @@ export const MESSAGES = {
                 },
                 SUCCESS: (old: string, target: string) =>
                     `Old Inactive Time: \`${old}\`\nNew Enforce Subject: \`${target}\``
+            },
+            TRANSCRIPT: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, would you like to create and send transcripts after closing a ticket?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please enter true **or** false.`
+                },
+                SUCCESS: (old: string, target: string) =>
+                    `Old Transcript: \`${old}\`\nNew Transcript: \`${target}\``
             }
         }
     },
@@ -261,7 +275,9 @@ export const COMMAND_DESCRIPTIONS = {
         ENFORCESUBJECT:
             "Use this command to set the whether or not a subject must be used when creating a ticket",
         INACTIVETIME:
-            "Use this command to set the time after which an inactive ticket should be closed. **NOTE:** this should be entered in minutes"
+            "Use this command to set the time after which an inactive ticket should be closed. **NOTE:** this should be entered in minutes",
+        TRANSCRIPT:
+            "Use this command to set whether or not transcripts should be generated a ticket is closed"
     }
 };
 

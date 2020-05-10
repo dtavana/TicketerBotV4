@@ -34,6 +34,9 @@ export class TicketerGuild {
 
     @prop({ default: 120 })
     INACTIVETIME?: number;
+
+    @prop({ default: false })
+    TRANSCRIPT?: boolean;
 }
 
 export default getModelForClass(TicketerGuild);
