@@ -12,12 +12,13 @@ export enum SETTINGS {
     TICKETPREFIX = "TICKETPREFIX",
     LOGCHANNEL = "LOGCHANNEL",
     MAXTICKETS = "MAXTICKETS",
-    ENFORCESUBJECT = "ENFORCESUBJECT"
+    ENFORCESUBJECT = "ENFORCESUBJECT",
+    INACTIVETIME = "INACTIVETIME"
 }
 
 export interface Settings {
     GUILDID: string;
-    PREMIUM: string;
+    PREMIUM: boolean;
     PREFIX: string;
     BLACKLIST: string[];
     ADMINROLE: string;
@@ -26,6 +27,7 @@ export interface Settings {
     LOGCHANNEL: string;
     MAXTICKETS: number;
     ENFORCESUBJECT: boolean;
+    INACTIVETIME: number;
 }
 
 export const CLIENT_OPTIONS = {
@@ -69,9 +71,24 @@ export const COMMAND_NAMES = {
         TICKETPREFIX: "ticketprefix",
         LOGCHANNEL: "logchannel",
         MAXTICKETS: "maxtickets",
-        ENFORCESUBJECT: "enforcesubject"
+        ENFORCESUBJECT: "enforcesubject",
+        INACTIVETIME: "inactivetime"
+    },
+    INFO: {
+        UPGRADE: "upgrade"
+    },
+    CREDITS: {
+        REDEEM: "redeem",
+        CREDITS: "credits"
     }
 };
+
+export const PREMIUM_COMMANDS = [
+    COMMAND_NAMES.CONFIG.TICKETPREFIX,
+    COMMAND_NAMES.CONFIG.MAXTICKETS,
+    COMMAND_NAMES.CONFIG.ENFORCESUBJECT,
+    COMMAND_NAMES.CONFIG.INACTIVETIME
+];
 
 export const MESSAGES = {
     COMMANDS: {
@@ -163,6 +180,16 @@ export const MESSAGES = {
                 },
                 SUCCESS: (old: string, target: string) =>
                     `Old Enforce Subject: \`${old}\`\nNew Enforce Subject: \`${target}\``
+            },
+            INACTIVETIME: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, what would you like to set as the inactive time?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please enter a number.`
+                },
+                SUCCESS: (old: string, target: string) =>
+                    `Old Inactive Time: \`${old}\`\nNew Enforce Subject: \`${target}\``
             }
         }
     },
@@ -200,7 +227,9 @@ export const MESSAGES = {
     },
     SETTINGS_MANAGER: {
         LOADED: "Settings manager has been loaded!"
-    }
+    },
+    PREMIUM_BLOCKED: (prefix: string) =>
+        `This command requires premium. Consider upgrading using \`${prefix}${COMMAND_NAMES.INFO.UPGRADE}\`. If you believe you already have a credit, use \`${prefix}${COMMAND_NAMES.CREDITS.REDEEM}\` to enable premium on this server. You can view all of your credits using \`${prefix}${COMMAND_NAMES.CREDITS.CREDITS}\``
 };
 
 export const SETTINGS_PERMISSION = "MANAGE_GUILD";
@@ -230,7 +259,9 @@ export const COMMAND_DESCRIPTIONS = {
         MAXTICKETS:
             "Use this command to set the maximum number of tickets. **NOTE:** -1 will allow for an unlimited number of tickets per user",
         ENFORCESUBJECT:
-            "Use this command to set the whether or not a subject must be used when creating a ticket"
+            "Use this command to set the whether or not a subject must be used when creating a ticket",
+        INACTIVETIME:
+            "Use this command to set the time after which an inactive ticket should be closed. **NOTE:** this should be entered in minutes"
     }
 };
 
