@@ -10,7 +10,8 @@ export enum SETTINGS {
     ADMINROLE = "ADMINROLE",
     MODERATORROLE = "MODERATORROLE",
     TICKETPREFIX = "TICKETPREFIX",
-    LOGCHANNEL = "LOGCHANNEL"
+    LOGCHANNEL = "LOGCHANNEL",
+    MAXTICKETS = "MAXTICKETS"
 }
 
 export interface Settings {
@@ -22,6 +23,7 @@ export interface Settings {
     MODERATORROLE: string;
     TICKETPREFIX: string;
     LOGCHANNEL: string;
+    MAXTICKETS: number;
 }
 
 export const CLIENT_OPTIONS = {
@@ -63,7 +65,8 @@ export const COMMAND_NAMES = {
         ADMINROLE: "adminrole",
         MODERATORROLE: "moderatorrole",
         TICKETPREFIX: "ticketprefix",
-        LOGCHANNEL: "logchannel"
+        LOGCHANNEL: "logchannel",
+        MAXTICKETS: "maxtickets"
     }
 };
 
@@ -137,6 +140,16 @@ export const MESSAGES = {
                 },
                 SUCCESS: (old: string, target: string) =>
                     `Old Log Channel: ${old}\nNew Log Channel: ${target}`
+            },
+            MAXTICKETS: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, what would you like to set as the maximum number of tickets? **NOTE:** -1 will allow for unlimited tickets`,
+                    RETRY: (author?: User) =>
+                        `${author}, please enter a number.`
+                },
+                SUCCESS: (old: string, target: string) =>
+                    `Old Max Tickets: \`${old}\`\nNew Max Tickets: \`${target}\``
             }
         }
     },
@@ -200,7 +213,9 @@ export const COMMAND_DESCRIPTIONS = {
         MODERATORROLE: "Use this command to set the moderator role",
         TICKETPREFIX: "Use this command to set the ticket prefix",
         LOGCHANNEL:
-            "Use this command to set the log channel. This is where transcripts and other information about tickets will be posted"
+            "Use this command to set the log channel. This is where transcripts and other information about tickets will be posted",
+        MAXTICKETS:
+            "Use this command to set the maximum number of tickets. **NOTE:** -1 will allow for an unlimited number of tickets per user"
     }
 };
 

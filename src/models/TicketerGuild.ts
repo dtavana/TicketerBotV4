@@ -25,6 +25,9 @@ export class TicketerGuild {
 
     @prop({ unique: true })
     LOGCHANNEL?: string;
+
+    @prop({ default: -1 })
+    MAXTICKETS?: number;
 }
 
 export default getModelForClass(TicketerGuild);
