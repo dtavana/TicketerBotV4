@@ -15,13 +15,16 @@ export class GuildSettingsClass {
     BLACKLIST?: string[];
 
     @prop()
-    ADMINROLE?: string;
+    MODERATORROLE?: string;
 
     @prop()
-    MODERATORROLE?: string;
+    ADMINROLE?: string;
 
     @prop({ default: DEFAULT_SETTINGS.DEFAULT_TICKET_PREFIX })
     TICKETPREFIX?: string;
+
+    @prop({ unique: true })
+    LOGCHANNEL?: string;
 }
 
 export default getModelForClass(GuildSettingsClass);

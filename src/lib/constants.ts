@@ -4,38 +4,48 @@ import { User } from "discord.js";
 
 export enum SETTINGS {
     GUILDID = "GUILDID",
+    PREMIUM = "PREMIUM",
     PREFIX = "PREFIX",
     BLACKLIST = "BLACKLIST",
     ADMINROLE = "ADMINROLE",
     MODERATORROLE = "MODERATORROLE",
-    TICKETPREFIX = "TICKETPREFIX"
+    TICKETPREFIX = "TICKETPREFIX",
+    LOGCHANNEL = "LOGCHANNEL"
 }
 
 export interface Settings {
     GUILDID: string;
+    PREMIUM: string;
     PREFIX: string;
     BLACKLIST: string[];
     ADMINROLE: string;
     MODERATORROLE: string;
     TICKETPREFIX: string;
+    LOGCHANNEL: string;
 }
+
+export const CLIENT_OPTIONS = {
+    DEFAULT_PREFIX: "-",
+    OWNERS: ["112762841173368832"],
+    FOOTER_TEXT: "Ticketer v4.0 | twist#7777"
+};
 
 export const EMBEDS = {
     SUCCESS: () => {
         return new MessageEmbed()
-            .setFooter(process.env.FOOTER_TEXT)
+            .setFooter(CLIENT_OPTIONS.FOOTER_TEXT)
             .setColor("GREEN")
             .setTimestamp();
     },
     FAILURE: () => {
         return new MessageEmbed()
-            .setFooter(process.env.FOOTER_TEXT)
+            .setFooter(CLIENT_OPTIONS.FOOTER_TEXT)
             .setColor("RED")
             .setTimestamp();
     },
     PROMPT: (text: string): MessageEmbed => {
         return new MessageEmbed()
-            .setFooter(process.env.FOOTER_TEXT)
+            .setFooter(CLIENT_OPTIONS.FOOTER_TEXT)
             .setColor("YELLOW")
             .setTimestamp()
             .setDescription(
@@ -52,7 +62,8 @@ export const COMMAND_NAMES = {
         SETUP: "setup",
         ADMINROLE: "adminrole",
         MODERATORROLE: "moderatorrole",
-        TICKETPREFIX: "ticketprefix"
+        TICKETPREFIX: "ticketprefix",
+        LOGCHANNEL: "logchannel"
     }
 };
 
@@ -116,6 +127,16 @@ export const MESSAGES = {
                 },
                 SUCCESS: (old: string, target: string) =>
                     `Old Ticket Prefix: \`${old}\`\nNew Ticket Prefix: \`${target}\``
+            },
+            LOGCHANNEL: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, what would you like to set as the log channel?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please mention a channel.`
+                },
+                SUCCESS: (old: string, target: string) =>
+                    `Old Log Channel: ${old}\nNew Log Channel: ${target}`
             }
         }
     },
@@ -177,15 +198,12 @@ export const COMMAND_DESCRIPTIONS = {
     CONFIG: {
         ADMINROLE: "Use this command to set the administrator role",
         MODERATORROLE: "Use this command to set the moderator role",
-        TICKETPREFIX: "Use this command to set the ticket prefix"
+        TICKETPREFIX: "Use this command to set the ticket prefix",
+        LOGCHANNEL:
+            "Use this command to set the log channel. This is where transcripts and other information about tickets will be posted"
     }
 };
 
 export const ROLE_IDS = {};
 
 export const CHANNEL_IDS = {};
-
-export const CLIENT_OPTIONS = {
-    DEFAULT_PREFIX: "-",
-    OWNERS: ["112762841173368832"]
-};
