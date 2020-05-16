@@ -1,5 +1,12 @@
-import { prop, getModelForClass, arrayProp } from "@typegoose/typegoose";
+import {
+    prop,
+    getModelForClass,
+    arrayProp,
+    mapProp
+} from "@typegoose/typegoose";
 import { DEFAULT_SETTINGS } from "../lib/constants";
+import { TicketerChannel } from "./TicketerChannel";
+import { TicketerTicket } from "./TicketerTicket";
 
 export class TicketerGuild {
     @prop({ unique: true })
@@ -20,7 +27,7 @@ export class TicketerGuild {
     @prop()
     ADMINROLE?: string;
 
-    @prop({ default: DEFAULT_SETTINGS.DEFAULT_TICKET_PREFIX })
+    @prop({ default: DEFAULT_SETTINGS.TICKET_PREFIX })
     TICKETPREFIX?: string;
 
     @prop({ unique: true })
@@ -37,6 +44,12 @@ export class TicketerGuild {
 
     @prop({ default: false })
     TRANSCRIPT?: boolean;
+
+    @mapProp({ of: TicketerChannel })
+    TICKETCHANNELS?: Map<string, TicketerChannel>;
+
+    @mapProp({ of: TicketerTicket })
+    TICKETS?: Map<string, TicketerTicket>;
 }
 
 export default getModelForClass(TicketerGuild);

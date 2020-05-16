@@ -1,6 +1,8 @@
 import { MessageEmbed } from "discord.js";
 import { AkairoClient } from "discord-akairo";
 import { User } from "discord.js";
+import { TicketerChannel } from "../models/TicketerChannel";
+import { TicketerTicket } from "../models/TicketerTicket";
 
 export enum SETTINGS {
     GUILDID = "GUILDID",
@@ -14,7 +16,9 @@ export enum SETTINGS {
     MAXTICKETS = "MAXTICKETS",
     ENFORCESUBJECT = "ENFORCESUBJECT",
     INACTIVETIME = "INACTIVETIME",
-    TRANSCRIPT = "TRANSCRIPT"
+    TRANSCRIPT = "TRANSCRIPT",
+    TICKETCHANNELS = "TICKETCHANNELS",
+    TICKETS = "TICKETS"
 }
 
 export interface Settings {
@@ -30,6 +34,8 @@ export interface Settings {
     ENFORCESUBJECT: boolean;
     INACTIVETIME: number;
     TRANSCRIPT: boolean;
+    TICKETCHANNELS: Map<string, TicketerChannel>;
+    TICKETS: Map<string, TicketerTicket>;
 }
 
 export const CLIENT_OPTIONS = {
@@ -75,7 +81,10 @@ export const COMMAND_NAMES = {
         MAXTICKETS: "maxtickets",
         ENFORCESUBJECT: "enforcesubject",
         INACTIVETIME: "inactivetime",
-        TRANSCRIPT: "transcript"
+        TRANSCRIPT: "transcript",
+        TICKET_CHANNEL_CONFIG: {
+            WELCOMEMESSAGE: "welcomemessage"
+        }
     },
     INFO: {
         UPGRADE: "upgrade"
@@ -91,11 +100,20 @@ export const PREMIUM_COMMANDS = [
     COMMAND_NAMES.CONFIG.MAXTICKETS,
     COMMAND_NAMES.CONFIG.ENFORCESUBJECT,
     COMMAND_NAMES.CONFIG.INACTIVETIME,
-    COMMAND_NAMES.CONFIG.TRANSCRIPT
+    COMMAND_NAMES.CONFIG.TRANSCRIPT,
+    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.WELCOMEMESSAGE
 ];
 
 export const MESSAGES = {
     COMMANDS: {
+        TYPES: {
+            TICKETER_CHANNEL: {
+                START: (author?: User) =>
+                    `${author}, what Ticketer channel do you want to modify?`,
+                RETRY: (author?: User) =>
+                    `${author}, please input a valid Ticketer channel.`
+            }
+        },
         MODERATION: {
             BLACKLIST: {
                 PROMPT: {
@@ -204,6 +222,18 @@ export const MESSAGES = {
                 },
                 SUCCESS: (old: string, target: string) =>
                     `Old Transcript: \`${old}\`\nNew Transcript: \`${target}\``
+            },
+            TICKET_CHANNEL_CONFIG: {
+                WELCOMEMESSAGE: {
+                    PROMPT: {
+                        START: (author?: User) =>
+                            `${author}, what would you like to set as the welcome message?`,
+                        RETRY: (author?: User) =>
+                            `${author}, please type a string less than 1500 characters.`
+                    },
+                    SUCCESS: (target: string) =>
+                        `New Welcome Message: ${target}`
+                }
             }
         }
     },
@@ -249,12 +279,15 @@ export const MESSAGES = {
 export const SETTINGS_PERMISSION = "MANAGE_GUILD";
 
 export const DEFAULT_SETTINGS = {
-    DEFAULT_TICKET_PREFIX: "ticket"
+    TICKET_PREFIX: "ticket",
+    WELCOME_MESSAGE:
+        "Thank you for creating a ticket. Support will be with you shortly."
 };
 
 export const COMMAND_CATEGORIES = {
     MODERATION: "moderation",
-    CONFIG: "config"
+    CONFIG: "config",
+    TICKET_CHANNEL_CONFIG: "ticket-channel-config"
 };
 
 export const COMMAND_DESCRIPTIONS = {
@@ -277,7 +310,11 @@ export const COMMAND_DESCRIPTIONS = {
         INACTIVETIME:
             "Use this command to set the time after which an inactive ticket should be closed. **NOTE:** this should be entered in minutes",
         TRANSCRIPT:
-            "Use this command to set whether or not transcripts should be generated a ticket is closed"
+            "Use this command to set whether or not transcripts should be generated a ticket is closed",
+        TICKET_CHANNEL_CONFIG: {
+            WELCOMEMESSAGE:
+                "Use this command to set the text sent at the beggining of a ticket"
+        }
     }
 };
 

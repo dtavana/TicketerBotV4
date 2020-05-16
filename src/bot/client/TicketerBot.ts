@@ -16,6 +16,7 @@ import TicketerGuild from "../../models/TicketerGuild";
 import { Logger } from "winston";
 import logger, { TOPICS, EVENTS } from "../../utils/logger";
 import { Message } from "discord.js";
+import { Flag } from "discord-akairo";
 
 declare module "discord-akairo" {
     interface AkairoClient {
@@ -72,6 +73,34 @@ export default class TicketerBotClient extends AkairoClient {
             {
                 messageCacheMaxSize: 1000
             }
+        );
+
+        this.commandHandler.resolver.addType(
+            "ticketer-channel",
+            async (message, phrase) => {
+                if (!message.guild) return Flag.fail(phrase);
+                if (!phrase) return Flag.fail(phrase);
+                const ticketChannel = this.settings
+                    .get(message.guild!, SETTINGS.TICKETCHANNELS)
+                    ?.get(phrase);
+                return ticketChannel || Flag.fail(phrase);
+            }
+        );
+
+        this.commandHandler.resolver.addType(
+            "ticketer-ticket",
+            async (message, phrase) => {
+                if (!message.guild) return Flag.fail(phrase);
+                if (!phrase) return Flag.fail(phrase);
+                const ticket = this.settings
+                    .get(message.guild!, SETTINGS.TICKETS)
+                    ?.get(phrase);
+                return ticket || Flag.fail(phrase);
+            }
+        );
+
+        process.on("unhandledRejection", (err: any) =>
+            this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION })
         );
     }
 
