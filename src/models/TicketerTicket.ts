@@ -1,4 +1,4 @@
-import { prop, getModelForClass, Ref, getName } from "@typegoose/typegoose";
+import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
 import { TicketerChannel } from "./TicketerChannel";
 
 export class TicketerTicket {
