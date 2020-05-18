@@ -67,11 +67,11 @@ export default class WelcomeMessageCommand extends Command {
         }: { ticketerChannel: TicketerChannel; target: string }
     ) {
         ticketerChannel.WELCOMEMESSAGE = target;
-        const oldMap = this.client.settings.get(
+        const oldMap: Map<string, TicketerChannel> = this.client.settings.get(
             message.guild!,
             SETTINGS.TICKETCHANNELS
         );
-        oldMap!.set(ticketerChannel.CHANNELID, ticketerChannel);
+        oldMap.set(ticketerChannel.CHANNELID, ticketerChannel);
         this.client.settings.set(
             message.guild!,
             SETTINGS.TICKETCHANNELS,
