@@ -11,7 +11,8 @@ import {
     CLIENT_OPTIONS,
     SETTINGS,
     Settings,
-    MESSAGES
+    MESSAGES,
+    DEFAULT_SETTINGS
 } from "../../lib/constants";
 import { DocumentType } from "@typegoose/typegoose";
 
@@ -73,25 +74,24 @@ export default class SettingsManager extends Provider {
             return (undefined as unknown) as T;
         }
         let previousValue: unknown;
-        const document: TicketerGuildClass | null = await this.model.findOne({
-            GUILDID
-        });
-        if (document != null) {
-            previousValue = document[key];
-            document[key] = value;
-            await (document as DocumentType<TicketerGuildClass>).save();
-            this.items.get(GUILDID)[key] = value;
-        } else {
-            const newDocument: TicketerGuildClass = await this.model.create({
-                GUILDID
-            });
-            newDocument[key] = value;
-            await (newDocument as DocumentType<TicketerGuildClass>).save();
-            this.items.set(
-                GUILDID,
-                (newDocument as DocumentType<TicketerGuildClass>).toObject()
+        let updatedSettings: DocumentType<TicketerGuildClass> | null;
+        if (this.items.has(GUILDID)) {
+            previousValue = this.items.get(GUILDID)[key];
+            updatedSettings = await this.model.findOneAndUpdate(
+                { GUILDID },
+                { [key]: value },
+                { new: true }
             );
+            updatedSettings = updatedSettings!.toObject();
+        } else {
+            updatedSettings = await this.model.create({
+                GUILDID,
+                [key]: value
+            });
+            updatedSettings = updatedSettings.toObject();
+            this.setGuildPrefix(GUILDID, CLIENT_OPTIONS.DEFAULT_PREFIX);
         }
+        this.items.set(GUILDID, updatedSettings);
         if (key === SETTINGS.PREFIX)
             this.setGuildPrefix(GUILDID, value as string);
         return previousValue as T;
