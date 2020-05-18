@@ -111,7 +111,7 @@ export default class TicketChannelCommand extends Command {
             SETTINGS.TICKETCHANNELS,
             new Map<string, TicketerChannelClass>()
         );
-        const newTicketerChannel = await TicketerChannel.create({
+        const newTicketerChannel = new TicketerChannel({
             GUILDID: message.guild!.id,
             CHANNELID: channel!.id,
             CATEGORYID: createdCategory
