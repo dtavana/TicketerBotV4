@@ -2,7 +2,10 @@ import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
 import { TicketerChannel } from "./TicketerChannel";
 
 export class TicketerTicket {
-    @prop({ unique: true })
+    @prop()
+    GUILDID!: string;
+
+    @prop()
     CHANNELID!: string;
 
     @prop()

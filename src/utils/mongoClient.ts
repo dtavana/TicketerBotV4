@@ -4,7 +4,7 @@ const _connect = (): Promise<Mongoose> => {
     return connect(process.env.MONGO_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: true,
+        useFindAndModify: false,
         useCreateIndex: true
     }).then();
 };

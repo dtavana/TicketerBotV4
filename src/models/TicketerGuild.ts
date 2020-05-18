@@ -30,7 +30,7 @@ export class TicketerGuild {
     @prop({ default: DEFAULT_SETTINGS.TICKET_PREFIX })
     TICKETPREFIX?: string;
 
-    @prop({ unique: true })
+    @prop()
     LOGCHANNEL?: string;
 
     @prop({ default: -1 })
@@ -45,10 +45,13 @@ export class TicketerGuild {
     @prop({ default: false })
     TRANSCRIPT?: boolean;
 
-    @mapProp({ of: TicketerChannel })
+    @mapProp({
+        of: TicketerChannel,
+        default: new Map<string, TicketerChannel>()
+    })
     TICKETCHANNELS?: Map<string, TicketerChannel>;
 
-    @mapProp({ of: TicketerTicket })
+    @mapProp({ of: TicketerTicket, default: new Map<string, TicketerTicket>() })
     TICKETS?: Map<string, TicketerTicket>;
 }
 

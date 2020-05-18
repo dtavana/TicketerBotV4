@@ -3,11 +3,14 @@ import { TicketerTicket } from "./TicketerTicket";
 import { DEFAULT_SETTINGS } from "../lib/constants";
 
 export class TicketerChannel {
-    @prop({ unique: true })
+    @prop()
+    GUILDID!: string;
+
+    @prop()
     CHANNELID!: string;
 
-    @prop({ unique: true })
-    CATEGORYID!: string;
+    @prop()
+    CATEGORYID?: string;
 
     @prop({ default: false })
     MODCLOSE?: boolean;
@@ -18,7 +21,7 @@ export class TicketerChannel {
     @prop({ default: DEFAULT_SETTINGS.WELCOME_MESSAGE })
     WELCOMEMESSAGE?: string;
 
-    @mapProp({ of: TicketerTicket })
+    @mapProp({ of: TicketerTicket, default: new Map<string, TicketerTicket>() })
     TICKETS?: Map<string, TicketerTicket>;
 }
 

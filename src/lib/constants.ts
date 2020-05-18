@@ -83,7 +83,8 @@ export const COMMAND_NAMES = {
         INACTIVETIME: "inactivetime",
         TRANSCRIPT: "transcript",
         TICKET_CHANNEL_CONFIG: {
-            WELCOMEMESSAGE: "welcomemessage"
+            WELCOMEMESSAGE: "welcomemessage",
+            TICKETCHANNEL: "ticketchannel"
         }
     },
     INFO: {
@@ -233,6 +234,19 @@ export const MESSAGES = {
                     },
                     SUCCESS: (target: string) =>
                         `New Welcome Message: ${target}`
+                },
+                TICKETCHANNEL: {
+                    PROMPT: {
+                        START: (author?: User) =>
+                            `${author}, what would you like to set as the name of this ticket channel?`,
+                        RETRY: (author?: User) =>
+                            `${author}, please type a string less than 20 characters.`
+                    },
+                    ERRORS: {
+                        MISSING_PERMISSIONS:
+                            "I am missing permissions to create channels, check that I have the **Manage Channels** permission enabled"
+                    },
+                    SUCCESS: (target: string) => `New Ticket Channel: ${target}`
                 }
             }
         }
@@ -244,6 +258,9 @@ export const MESSAGES = {
             CANCEL: "The command has been cancelled."
         },
         LOADED: "Command Handler has been loaded!"
+    },
+    ERRORS: {
+        DEFAULT: "An unknown error has occured."
     },
     EVENTS: {
         READY: {
@@ -273,10 +290,18 @@ export const MESSAGES = {
         LOADED: "Settings manager has been loaded!"
     },
     PREMIUM_BLOCKED: (prefix: string) =>
-        `This command requires premium. Consider upgrading using \`${prefix}${COMMAND_NAMES.INFO.UPGRADE}\`. If you believe you already have a credit, use \`${prefix}${COMMAND_NAMES.CREDITS.REDEEM}\` to enable premium on this server. You can view all of your credits using \`${prefix}${COMMAND_NAMES.CREDITS.CREDITS}\``
+        `This command requires premium. Consider upgrading using \`${prefix}${COMMAND_NAMES.INFO.UPGRADE}\`. If you believe you already have a credit, use \`${prefix}${COMMAND_NAMES.CREDITS.REDEEM}\` to enable premium on this server. You can view all of your credits using \`${prefix}${COMMAND_NAMES.CREDITS.CREDITS}\``,
+    MAXTICKETCHANNELS: (maxTickets: number, premium: boolean, prefix: string) =>
+        premium
+            ? `As a premium user, you can only have a maximum of ${maxTickets} ticket channels`
+            : `As a non-premium user, you can only have a maximum of ${maxTickets} ticket channels. Consider upgrading to premium using \`${prefix}${COMMAND_NAMES.INFO.UPGRADE}\``
 };
 
 export const SETTINGS_PERMISSION = "MANAGE_GUILD";
+
+export const MAX_REGULAR_TICKETCHANNELS = 1;
+
+export const MAX_PREMIUM_TICKETCHANNELS = 5;
 
 export const DEFAULT_SETTINGS = {
     TICKET_PREFIX: "ticket",
@@ -313,7 +338,8 @@ export const COMMAND_DESCRIPTIONS = {
             "Use this command to set whether or not transcripts should be generated a ticket is closed",
         TICKET_CHANNEL_CONFIG: {
             WELCOMEMESSAGE:
-                "Use this command to set the text sent at the beggining of a ticket"
+                "Use this command to set the text sent at the beggining of a ticket",
+            TICKETCHANNEL: "Use this command to create a new ticket channel"
         }
     }
 };
