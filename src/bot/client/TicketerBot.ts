@@ -80,9 +80,13 @@ export default class TicketerBotClient extends AkairoClient {
             async (message, phrase) => {
                 if (!message.guild) return Flag.fail(phrase);
                 if (!phrase) return Flag.fail(phrase);
+                const resolvedChannel = this.util.resolveChannel(
+                    phrase,
+                    message.guild.channels.cache
+                );
                 const ticketChannel = this.settings
                     .get(message.guild!, SETTINGS.TICKETCHANNELS)
-                    ?.get(phrase);
+                    ?.get(resolvedChannel.id ?? "");
                 return ticketChannel || Flag.fail(phrase);
             }
         );
@@ -92,9 +96,13 @@ export default class TicketerBotClient extends AkairoClient {
             async (message, phrase) => {
                 if (!message.guild) return Flag.fail(phrase);
                 if (!phrase) return Flag.fail(phrase);
+                const resolvedChannel = this.util.resolveChannel(
+                    phrase,
+                    message.guild.channels.cache
+                );
                 const ticket = this.settings
                     .get(message.guild!, SETTINGS.TICKETS)
-                    ?.get(phrase);
+                    ?.get(resolvedChannel.id ?? "");
                 return ticket || Flag.fail(phrase);
             }
         );
