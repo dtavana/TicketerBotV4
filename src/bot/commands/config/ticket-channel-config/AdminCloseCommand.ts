@@ -8,7 +8,6 @@ import {
     COMMAND_NAMES,
     MESSAGES
 } from "../../../../lib/constants";
-import { Argument } from "discord-akairo";
 import { TicketerChannel } from "../../../../models/TicketerChannel";
 
 export default class AdminCloseCommand extends Command {
