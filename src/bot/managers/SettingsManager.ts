@@ -15,7 +15,7 @@ import {
     ChannelMapSettings,
     TicketMapSettings
 } from "../../lib/constants";
-import { DocumentType, pre } from "@typegoose/typegoose";
+import { DocumentType } from "@typegoose/typegoose";
 import { TicketerChannel } from "../../models/TicketerChannel";
 import { TicketerTicket } from "../../models/TicketerTicket";
 
