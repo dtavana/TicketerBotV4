@@ -1,5 +1,4 @@
-import { prop, getModelForClass, mapProp } from "@typegoose/typegoose";
-import { TicketerTicket } from "./TicketerTicket";
+import { prop, getModelForClass } from "@typegoose/typegoose";
 import { DEFAULT_SETTINGS } from "../lib/constants";
 
 export class TicketerChannel {
@@ -20,9 +19,6 @@ export class TicketerChannel {
 
     @prop({ default: DEFAULT_SETTINGS.WELCOME_MESSAGE })
     WELCOMEMESSAGE?: string;
-
-    @mapProp({ of: TicketerTicket, default: new Map<string, TicketerTicket>() })
-    TICKETS?: Map<string, TicketerTicket>;
 }
 
 export default getModelForClass(TicketerChannel);
