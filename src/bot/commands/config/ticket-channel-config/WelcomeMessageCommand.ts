@@ -6,7 +6,8 @@ import {
     SETTINGS,
     EMBEDS,
     COMMAND_NAMES,
-    MESSAGES
+    MESSAGES,
+    CHANNELMAPSETTINGS
 } from "../../../../lib/constants";
 import { Argument } from "discord-akairo";
 import { TicketerChannel } from "../../../../models/TicketerChannel";
@@ -66,22 +67,16 @@ export default class WelcomeMessageCommand extends Command {
             target
         }: { ticketerChannel: TicketerChannel; target: string }
     ) {
-        ticketerChannel.WELCOMEMESSAGE = target;
-        const oldMap: Map<string, TicketerChannel> = this.client.settings.get(
+        await this.client.settings.setChannelProp(
             message.guild!,
-            SETTINGS.TICKETCHANNELS
+            ticketerChannel,
+            CHANNELMAPSETTINGS.WELCOMEMESSAGE,
+            target
         );
-        oldMap.set(ticketerChannel.CHANNELID, ticketerChannel);
-        this.client.settings.set(
-            message.guild!,
-            SETTINGS.TICKETCHANNELS,
-            oldMap
-        );
-
         return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
                 MESSAGES.COMMANDS.CONFIG.TICKET_CHANNEL_CONFIG.WELCOMEMESSAGE.SUCCESS(
-                    target
+                    target!
                 )
             )
         );

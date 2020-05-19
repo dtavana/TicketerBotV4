@@ -38,6 +38,40 @@ export interface Settings {
     TICKETS: Map<string, TicketerTicket>;
 }
 
+export enum CHANNELMAPSETTINGS {
+    GUILDID = "GUILDID",
+    CHANNELID = "CHANNELID",
+    CATEGORYID = "CATEGORYID",
+    ADMINCLOSE = "ADMINCLOSE",
+    MODCLOSE = "MODCLOSE",
+    WELCOMEMESSAGE = "WELCOMEMESSAGE"
+}
+
+export interface ChannelMapSettings {
+    GUILDID: string;
+    CHANNELID: string;
+    CATEGORYID: string;
+    ADMINCLOSE: boolean;
+    MODCLOSE: boolean;
+    WELCOMEMESSAGE: boolean;
+}
+
+export enum TICKETMAPSETTINGS {
+    GUILDID = "GUILDID",
+    CHANNELID = "CHANNELID",
+    AUTHORID = "AUTHORID",
+    SUBJECT = "SUBJECT",
+    PARENT = "PARENT"
+}
+
+export interface TicketMapSettings {
+    GUILDID: string;
+    CHANNELID: string;
+    AUTHORID: string;
+    SUBJECT: string;
+    PARENT: string;
+}
+
 export const CLIENT_OPTIONS = {
     DEFAULT_PREFIX: "-",
     OWNERS: ["112762841173368832"],

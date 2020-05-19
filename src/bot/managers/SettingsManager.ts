@@ -12,9 +12,12 @@ import {
     SETTINGS,
     Settings,
     MESSAGES,
-    DEFAULT_SETTINGS
+    ChannelMapSettings,
+    TicketMapSettings
 } from "../../lib/constants";
-import { DocumentType } from "@typegoose/typegoose";
+import { DocumentType, pre } from "@typegoose/typegoose";
+import { TicketerChannel } from "../../models/TicketerChannel";
+import { TicketerTicket } from "../../models/TicketerTicket";
 
 export default class SettingsManager extends Provider {
     public ["constructor"]: typeof SettingsManager;
@@ -61,7 +64,7 @@ export default class SettingsManager extends Provider {
     /**
      * Returns `undefined` if `guild` was invalid or if a previous document is not found, otherwise returns the old value that was overwritten
      * @param {Guild | string} guild The guild to delete the key from
-     * @param {string} key The key to delete
+     * @param {string} key The key to update
      * @param {unknown} value The value to set `key` to
      * @template K A valid settings key
      */
@@ -94,6 +97,68 @@ export default class SettingsManager extends Provider {
         this.items.set(GUILDID, updatedSettings);
         if (key === SETTINGS.PREFIX)
             this.setGuildPrefix(GUILDID, value as string);
+        return previousValue as T;
+    }
+
+    /**
+     * Returns `undefined` if `guild` was invalid or if a previous document is not found, otherwise returns the old value that was overwritten
+     * @param {Guild | string} guild The guild to delete the key from
+     * @param {TicketerChannel} object The `TicketerChannel` to update
+     * @param {string} key The key to update
+     * @param {unknown} value The value to set `key` to
+     * @template K A valid settings key
+     */
+    public async setChannelProp<
+        K extends keyof ChannelMapSettings,
+        T = TicketerChannel[K] | undefined
+    >(
+        guild: Guild | string,
+        object: TicketerChannel,
+        key: K,
+        value: TicketerChannel[K]
+    ): Promise<T> {
+        const GUILDID = this.constructor.getGuildId(guild);
+        if (GUILDID == null) {
+            return (undefined as unknown) as T;
+        }
+        const previousValue: unknown = object[key];
+        object[key] = value;
+        const map: Map<string, TicketerChannel> = this.items.get(GUILDID)[
+            SETTINGS.TICKETCHANNELS
+        ];
+        map.set(object.CHANNELID, object);
+        await this.set(guild, SETTINGS.TICKETCHANNELS, map);
+        return previousValue as T;
+    }
+
+    /**
+     * Returns `undefined` if `guild` was invalid or if a previous document is not found, otherwise returns the old value that was overwritten
+     * @param {Guild | string} guild The guild to delete the key from
+     * @param {TicketerTicket} object The `TicketerTicket` to update
+     * @param {string} key The key to update
+     * @param {unknown} value The value to set `key` to
+     * @template K A valid settings key
+     */
+    public async setTicketProp<
+        K extends keyof TicketMapSettings,
+        T = TicketerTicket[K] | undefined
+    >(
+        guild: Guild | string,
+        object: TicketerTicket,
+        key: K,
+        value: TicketerTicket[K]
+    ): Promise<T> {
+        const GUILDID = this.constructor.getGuildId(guild);
+        if (GUILDID == null) {
+            return (undefined as unknown) as T;
+        }
+        const previousValue: unknown = object[key];
+        object[key] = value;
+        const map: Map<string, TicketerTicket> = this.items.get(GUILDID)[
+            SETTINGS.TICKETS
+        ];
+        map.set(object.CHANNELID, object);
+        await this.set(guild, SETTINGS.TICKETS, map);
         return previousValue as T;
     }
 

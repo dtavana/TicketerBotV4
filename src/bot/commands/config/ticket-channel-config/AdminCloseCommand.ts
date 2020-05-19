@@ -6,7 +6,8 @@ import {
     SETTINGS,
     EMBEDS,
     COMMAND_NAMES,
-    MESSAGES
+    MESSAGES,
+    CHANNELMAPSETTINGS
 } from "../../../../lib/constants";
 import { TicketerChannel } from "../../../../models/TicketerChannel";
 
@@ -61,19 +62,12 @@ export default class AdminCloseCommand extends Command {
             target
         }: { ticketerChannel: TicketerChannel; target: boolean }
     ) {
-        ticketerChannel.ADMINCLOSE = target;
-        const oldMap: Map<string, TicketerChannel> = this.client.settings.get(
+        const adminClose = await this.client.settings.setChannelProp(
             message.guild!,
-            SETTINGS.TICKETCHANNELS
+            ticketerChannel,
+            CHANNELMAPSETTINGS.ADMINCLOSE,
+            target
         );
-        const adminClose = oldMap.get(ticketerChannel.CHANNELID)!.ADMINCLOSE;
-        oldMap.set(ticketerChannel.CHANNELID, ticketerChannel);
-        this.client.settings.set(
-            message.guild!,
-            SETTINGS.TICKETCHANNELS,
-            oldMap
-        );
-
         return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
                 MESSAGES.COMMANDS.CONFIG.TICKET_CHANNEL_CONFIG.ADMINCLOSE.SUCCESS(
