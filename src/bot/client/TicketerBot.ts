@@ -86,7 +86,7 @@ export default class TicketerBotClient extends AkairoClient {
                 );
                 const ticketChannel = this.settings
                     .get(message.guild!, SETTINGS.TICKETCHANNELS)
-                    ?.get(resolvedChannel.id ?? "");
+                    ?.get(resolvedChannel?.id);
                 return ticketChannel || Flag.fail(phrase);
             }
         );
@@ -102,7 +102,7 @@ export default class TicketerBotClient extends AkairoClient {
                 );
                 const ticket = this.settings
                     .get(message.guild!, SETTINGS.TICKETS)
-                    ?.get(resolvedChannel.id ?? "");
+                    ?.get(resolvedChannel?.id);
                 return ticket || Flag.fail(phrase);
             }
         );
