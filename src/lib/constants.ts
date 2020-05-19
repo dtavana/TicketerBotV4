@@ -69,7 +69,7 @@ export interface TicketMapSettings {
     CHANNELID: string;
     AUTHORID: string;
     SUBJECT: string;
-    PARENT: string;
+    PARENTID: string;
 }
 
 export const CLIENT_OPTIONS = {
