@@ -61,7 +61,7 @@ export enum TICKETMAPSETTINGS {
     CHANNELID = "CHANNELID",
     AUTHORID = "AUTHORID",
     SUBJECT = "SUBJECT",
-    PARENT = "PARENT"
+    PARENTID = "PARENTID"
 }
 
 export interface TicketMapSettings {

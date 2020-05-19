@@ -14,7 +14,7 @@ export class TicketerTicket {
     SUBJECT!: string;
 
     @prop()
-    PARENT?: string;
+    PARENTID?: string;
 }
 
 export default getModelForClass(TicketerTicket);
