@@ -1,5 +1,4 @@
-import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
-import { TicketerChannel } from "./TicketerChannel";
+import { prop, getModelForClass } from "@typegoose/typegoose";
 
 export class TicketerTicket {
     @prop()
@@ -14,8 +13,8 @@ export class TicketerTicket {
     @prop()
     SUBJECT!: string;
 
-    @prop({ ref: "TicketerChannel" })
-    PARENT?: Ref<TicketerChannel>;
+    @prop()
+    PARENT?: string;
 }
 
 export default getModelForClass(TicketerTicket);
