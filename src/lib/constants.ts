@@ -84,6 +84,7 @@ export const COMMAND_NAMES = {
         TRANSCRIPT: "transcript",
         TICKET_CHANNEL_CONFIG: {
             WELCOMEMESSAGE: "welcomemessage",
+            ADMINCLOSE: "adminclose",
             TICKETCHANNEL: "ticketchannel"
         }
     },
@@ -102,7 +103,8 @@ export const PREMIUM_COMMANDS = [
     COMMAND_NAMES.CONFIG.ENFORCESUBJECT,
     COMMAND_NAMES.CONFIG.INACTIVETIME,
     COMMAND_NAMES.CONFIG.TRANSCRIPT,
-    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.WELCOMEMESSAGE
+    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.WELCOMEMESSAGE,
+    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.ADMINCLOSE
 ];
 
 export const MESSAGES = {
@@ -225,6 +227,16 @@ export const MESSAGES = {
                     `Old Transcript: \`${old}\`\nNew Transcript: \`${target}\``
             },
             TICKET_CHANNEL_CONFIG: {
+                ADMINCLOSE: {
+                    PROMPT: {
+                        START: (author?: User) =>
+                            `${author}, would you like to disallow all non admins from closing tickets?`,
+                        RETRY: (author?: User) =>
+                            `${author}, please enter true **or** false.`
+                    },
+                    SUCCESS: (old: boolean, target: boolean) =>
+                        `Old Admin Close \`${old}\`\nNew Admin Close: \`${target}\``
+                },
                 WELCOMEMESSAGE: {
                     PROMPT: {
                         START: (author?: User) =>
@@ -329,7 +341,7 @@ export const COMMAND_DESCRIPTIONS = {
         LOGCHANNEL:
             "Use this command to set the log channel. This is where transcripts and other information about tickets will be posted",
         MAXTICKETS:
-            "Use this command to set the maximum number of tickets. **NOTE:** -1 will allow for an unlimited number of tickets per user",
+            "Use this command to set the maximum number of tickets. **NOTE:** **-1** will allow for an unlimited number of tickets per user",
         ENFORCESUBJECT:
             "Use this command to set the whether or not a subject must be used when creating a ticket",
         INACTIVETIME:
@@ -337,6 +349,8 @@ export const COMMAND_DESCRIPTIONS = {
         TRANSCRIPT:
             "Use this command to set whether or not transcripts should be generated a ticket is closed",
         TICKET_CHANNEL_CONFIG: {
+            ADMINCLOSE:
+                "Use this command to set whether or not to disallow non admins from closing tickets. **NOTE:** this will overwrite moderator close if set to **true**",
             WELCOMEMESSAGE:
                 "Use this command to set the text sent at the beggining of a ticket",
             TICKETCHANNEL: "Use this command to create a new ticket channel"
