@@ -85,6 +85,7 @@ export const COMMAND_NAMES = {
         TICKET_CHANNEL_CONFIG: {
             WELCOMEMESSAGE: "welcomemessage",
             ADMINCLOSE: "adminclose",
+            MODERATORCLOSE: "moderatorclose",
             TICKETCHANNEL: "ticketchannel"
         }
     },
@@ -104,7 +105,8 @@ export const PREMIUM_COMMANDS = [
     COMMAND_NAMES.CONFIG.INACTIVETIME,
     COMMAND_NAMES.CONFIG.TRANSCRIPT,
     COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.WELCOMEMESSAGE,
-    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.ADMINCLOSE
+    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.ADMINCLOSE,
+    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.MODERATORCLOSE
 ];
 
 export const MESSAGES = {
@@ -227,6 +229,16 @@ export const MESSAGES = {
                     `Old Transcript: \`${old}\`\nNew Transcript: \`${target}\``
             },
             TICKET_CHANNEL_CONFIG: {
+                MODERATORCLOSE: {
+                    PROMPT: {
+                        START: (author?: User) =>
+                            `${author}, would you like to disallow all non moderators/admins from closing tickets?`,
+                        RETRY: (author?: User) =>
+                            `${author}, please enter true **or** false.`
+                    },
+                    SUCCESS: (old: boolean, target: boolean) =>
+                        `Old Moderator Close \`${old}\`\nNew Moderator Close: \`${target}\``
+                },
                 ADMINCLOSE: {
                     PROMPT: {
                         START: (author?: User) =>
@@ -349,6 +361,8 @@ export const COMMAND_DESCRIPTIONS = {
         TRANSCRIPT:
             "Use this command to set whether or not transcripts should be generated a ticket is closed",
         TICKET_CHANNEL_CONFIG: {
+            MODERATORCLOSE:
+                "Use this command to set whether or not to disallow non moderators/admins from closing tickets. **NOTE:** this is overwritten by if set to admin close is set to **true**",
             ADMINCLOSE:
                 "Use this command to set whether or not to disallow non admins from closing tickets. **NOTE:** this will overwrite moderator close if set to **true**",
             WELCOMEMESSAGE:
