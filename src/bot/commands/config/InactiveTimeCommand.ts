@@ -52,7 +52,7 @@ export default class InactiveTimeCommand extends Command {
         }
         return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
-                MESSAGES.COMMANDS.CONFIG.MAXTICKETS.SUCCESS(
+                MESSAGES.COMMANDS.CONFIG.INACTIVETIME.SUCCESS(
                     inactiveTime,
                     timeConversion(target)
                 )
