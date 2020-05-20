@@ -17,11 +17,13 @@ import { Logger } from "winston";
 import logger, { TOPICS, EVENTS } from "../../utils/logger";
 import { Message } from "discord.js";
 import { Flag } from "discord-akairo";
+import TicketerManager from "../managers/TicketsManager";
 
 declare module "discord-akairo" {
     interface AkairoClient {
         commandHandler: CommandHandler;
         settings: SettingsManager;
+        tickets: TicketerManager;
         logger: Logger;
     }
 }
@@ -38,6 +40,8 @@ export default class TicketerBotClient extends AkairoClient {
     public logger = logger;
 
     public settings = new SettingsManager(TicketerGuild);
+
+    public tickets = new TicketerManager(this);
 
     public commandHandler: CommandHandler = new CommandHandler(this, {
         directory: join(__dirname, "..", "commands"),
