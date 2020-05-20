@@ -18,6 +18,7 @@ import {
 import { DocumentType } from "@typegoose/typegoose";
 import { TicketerChannel } from "../../models/TicketerChannel";
 import { TicketerTicket } from "../../models/TicketerTicket";
+import { Role } from "discord.js";
 
 export default class SettingsManager extends Provider {
     public ["constructor"]: typeof SettingsManager;
@@ -105,7 +106,7 @@ export default class SettingsManager extends Provider {
      * @param {Guild | string} guild The guild to delete the key from
      * @param {TicketerChannel} object The `TicketerChannel` to update
      * @param {string} key The key to update
-     * @param {unknown} value The value to set `key` to
+     * @param {TicketerChannel[K]} value The value to set `key` to
      * @template K A valid settings key
      */
     public async setChannelProp<
@@ -136,7 +137,7 @@ export default class SettingsManager extends Provider {
      * @param {Guild | string} guild The guild to delete the key from
      * @param {TicketerTicket} object The `TicketerTicket` to update
      * @param {string} key The key to update
-     * @param {unknown} value The value to set `key` to
+     * @param {TicketerTicket[K]} value The value to set `key` to
      * @template K A valid settings key
      */
     public async setTicketProp<
@@ -160,6 +161,26 @@ export default class SettingsManager extends Provider {
         map.set(object.CHANNELID, object);
         await this.set(guild, SETTINGS.TICKETS, map);
         return previousValue as T;
+    }
+
+    /**
+     * Returns `undefined` if a role can not be resolved. Otherwise, return a `Role` object.
+     * @param guild The guild to operate on
+     */
+    public resolveAdminRole(guild: Guild): Role | undefined {
+        const roleId = this.get(guild, SETTINGS.ADMINROLE);
+        const resolvedRole = guild.roles.cache.get(roleId ?? "");
+        return resolvedRole;
+    }
+
+    /**
+     * Returns `undefined` if a role can not be resolved. Otherwise, return a `Role` object.
+     * @param guild The guild to operate on
+     */
+    public resolveModeratorRole(guild: Guild): Role | undefined {
+        const roleId = this.get(guild, SETTINGS.MODERATORROLE);
+        const resolvedRole = guild.roles.cache.get(roleId ?? "");
+        return resolvedRole;
     }
 
     /**
@@ -214,10 +235,29 @@ export default class SettingsManager extends Provider {
             this.items.set(guildSetting.GUILDID, guildSetting);
             this.setGuildPrefix(guildSetting.GUILDID, guildSetting.PREFIX);
         });
+        this.client.guilds.cache.forEach(async (_, k) => {
+            if (!this.items.has(k)) {
+                const newSettings = await this.model.create({ GUILDID: k });
+                this.items.set(k, newSettings.toObject());
+                this.setGuildPrefix(k, CLIENT_OPTIONS.DEFAULT_PREFIX);
+            }
+        });
         this.client.logger.info(MESSAGES.SETTINGS_MANAGER.LOADED, {
             topic: TOPICS.DISCORD_AKAIRO,
             event: EVENTS.INIT
         });
+    }
+
+    public async initGuild(guild: Guild) {
+        const GUILDID = this.constructor.getGuildId(guild);
+        if (GUILDID == null) {
+            return;
+        }
+        if (!this.items.has(GUILDID)) {
+            const newSettings = await this.model.create({ GUILDID });
+            this.items.set(GUILDID, newSettings.toObject());
+            this.setGuildPrefix(guild, CLIENT_OPTIONS.DEFAULT_PREFIX);
+        }
     }
 
     private setGuildPrefix(
@@ -236,7 +276,7 @@ export default class SettingsManager extends Provider {
         }
     }
 
-    private static getGuildId(guild: Guild | string): string {
+    public static getGuildId(guild: Guild | string): string {
         if (guild instanceof Guild) return guild.id;
         if (guild === "global" || guild === null) return "0";
         if (typeof guild === "string" && /^\d+$/.test(guild)) return guild;
