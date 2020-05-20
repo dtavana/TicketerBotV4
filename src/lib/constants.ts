@@ -3,6 +3,7 @@ import { AkairoClient } from "discord-akairo";
 import { User } from "discord.js";
 import { TicketerChannel } from "../models/TicketerChannel";
 import { TicketerTicket } from "../models/TicketerTicket";
+import { Guild } from "discord.js";
 
 export enum SETTINGS {
     GUILDID = "GUILDID",
@@ -17,6 +18,7 @@ export enum SETTINGS {
     ENFORCESUBJECT = "ENFORCESUBJECT",
     INACTIVETIME = "INACTIVETIME",
     TRANSCRIPT = "TRANSCRIPT",
+    CURRENTTICKET = "CURRENTTICKET",
     TICKETCHANNELS = "TICKETCHANNELS",
     TICKETS = "TICKETS"
 }
@@ -34,6 +36,7 @@ export interface Settings {
     ENFORCESUBJECT: boolean;
     INACTIVETIME: number;
     TRANSCRIPT: boolean;
+    CURRENTTICKET: number;
     TICKETCHANNELS: Map<string, TicketerChannel>;
     TICKETS: Map<string, TicketerTicket>;
 }
@@ -105,6 +108,9 @@ export const COMMAND_NAMES = {
     MODERATION: {
         BLACKLIST: "blacklist",
         UNBLACKLIST: "unblacklist"
+    },
+    TICKETS: {
+        NEW: "new"
     },
     CONFIG: {
         SETUP: "setup",
@@ -296,17 +302,24 @@ export const MESSAGES = {
                 TICKETCHANNEL: {
                     PROMPT: {
                         START: (author?: User) =>
-                            `${author}, what would you like to set as the name of this ticket channel?`,
+                            `${author}, what would you like to set as the name of this ticket channel? **NOTE:** enter \`false\` to allow users to create tickets in any channel.`,
                         RETRY: (author?: User) =>
-                            `${author}, please type a string less than 20 characters.`
+                            `${author}, please type a string less than 20 characters **or** enter \`false\` to allow users to create tickets in any channel.`
                     },
                     ERRORS: {
+                        NON_TICKET_CHANNEL_EXISTS: (author?: User) =>
+                            `${author}, tickets can already be created in any channel.`,
+                        INVALID_TARGET: (author?: User) =>
+                            `${author}, \`true\` is an invalid option for this argument. Please only enter a name for the new channel or enter \`false\` to allow new tickets to be created in any channel.`,
                         MISSING_PERMISSIONS:
                             "I am missing permissions to create channels, check that I have the **Manage Channels** permission enabled"
                     },
                     SUCCESS: (target: string) => `New Ticket Channel: ${target}`
                 }
             }
+        },
+        TICKETS: {
+            NEW: {}
         }
     },
     COMMAND_HANDLER: {
@@ -321,6 +334,13 @@ export const MESSAGES = {
         DEFAULT: "An unknown error has occured."
     },
     EVENTS: {
+        GUILD_CREATE: {
+            LOG: (guild: Guild) =>
+                `Joined ${guild.name} and initialized settings`
+        },
+        GUILD_DELETE: {
+            LOG: (guild: Guild) => `Left ${guild.name} and cleared settings`
+        },
         READY: {
             LOG: (client: AkairoClient) =>
                 `Now logged in as ${client.user?.tag} (${client.user?.id}). Serving ${client.users.cache.size} users.`,
@@ -362,6 +382,7 @@ export const MAX_REGULAR_TICKETCHANNELS = 1;
 export const MAX_PREMIUM_TICKETCHANNELS = 5;
 
 export const DEFAULT_SETTINGS = {
+    SUBJECT: "None provided",
     TICKET_PREFIX: "ticket",
     WELCOME_MESSAGE:
         "Thank you for creating a ticket. Support will be with you shortly."
@@ -370,7 +391,8 @@ export const DEFAULT_SETTINGS = {
 export const COMMAND_CATEGORIES = {
     MODERATION: "moderation",
     CONFIG: "config",
-    TICKET_CHANNEL_CONFIG: "ticket-channel-config"
+    TICKET_CHANNEL_CONFIG: "ticket-channel-config",
+    TICKETS: "tickets"
 };
 
 export const COMMAND_DESCRIPTIONS = {
@@ -403,6 +425,9 @@ export const COMMAND_DESCRIPTIONS = {
                 "Use this command to set the text sent at the beggining of a ticket",
             TICKETCHANNEL: "Use this command to create a new ticket channel"
         }
+    },
+    TICKETS: {
+        NEW: "Use this command to create a new ticket"
     }
 };
 
