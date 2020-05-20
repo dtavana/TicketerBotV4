@@ -5,7 +5,9 @@ import { User } from "discord.js";
 import { TicketerChannel } from "../../models/TicketerChannel";
 import { GuildMember } from "discord.js";
 import { OverwriteData } from "discord.js";
-import TicketerTicket from "../../models/TicketerTicket";
+import TicketerTicket, {
+    TicketerTicket as TicketerTicketClass
+} from "../../models/TicketerTicket";
 import { Message } from "discord.js";
 
 export default class TicketsManager {
@@ -28,12 +30,11 @@ export default class TicketsManager {
         author: GuildMember | User
     ) {
         const map = this.getTickets(guild);
-        console.log(map);
-        map!.forEach((v, k, m) => {
-            if (v.AUTHORID !== author.id) delete m[k];
+        const updatedMap = new Map<string, TicketerTicketClass>();
+        map!.forEach((v, k) => {
+            if (v.AUTHORID === author.id) updatedMap.set(k, v);
         });
-        console.log(map);
-        return map;
+        return updatedMap;
     }
 
     public async openNewTicket(
