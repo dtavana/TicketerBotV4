@@ -9,10 +9,9 @@ import {
     MESSAGES
 } from "../../../../lib/constants";
 import { CategoryChannel } from "discord.js";
-import TicketerChannel, {
-    TicketerChannel as TicketerChannelClass
-} from "../../../../models/TicketerChannel";
 import { DiscordAPIError, Constants } from "discord.js";
+import { TextChannel } from "discord.js";
+import TicketerChannel from "../../../../models/TicketerChannel";
 
 export default class TicketChannelCommand extends Command {
     public constructor() {
@@ -53,11 +52,23 @@ export default class TicketChannelCommand extends Command {
         message: Message,
         { target, category }: { target: string; category: boolean }
     ) {
+        const ticketChannelExists = this.client.settings
+            .get(message.guild!, SETTINGS.TICKETCHANNELS)!
+            .has("");
+        if (ticketChannelExists) {
+            return message.util?.send(
+                EMBEDS.FAILURE().setDescription(
+                    MESSAGES.COMMANDS.CONFIG.TICKET_CHANNEL_CONFIG.TICKETCHANNEL.ERRORS.NON_TICKET_CHANNEL_EXISTS(
+                        message.author
+                    )
+                )
+            );
+        }
         let createdCategory: CategoryChannel | string | undefined = undefined;
         if (category) {
             try {
                 createdCategory = await message.guild?.channels.create(
-                    `${target}-category`,
+                    `${target === "false" ? "ticket" : target}-category`,
                     {
                         type: "category",
                         position: 0,
@@ -84,39 +95,46 @@ export default class TicketChannelCommand extends Command {
                 );
             }
         }
-        let channel;
-        try {
-            channel = await message.guild?.channels.create(target, {
-                parent: createdCategory,
-                reason: "Creating Ticketer Channel"
-            });
-        } catch (error) {
-            if (error instanceof DiscordAPIError) {
-                if (error.code === Constants.APIErrors.MISSING_PERMISSIONS) {
-                    return message.util?.send(
-                        EMBEDS.FAILURE().setDescription(
-                            MESSAGES.COMMANDS.CONFIG.TICKET_CHANNEL_CONFIG
-                                .TICKETCHANNEL.ERRORS.MISSING_PERMISSIONS
-                        )
-                    );
+        let channel: string | TextChannel | undefined = undefined;
+        if (target !== "false") {
+            try {
+                channel = await message.guild?.channels.create(target, {
+                    parent: createdCategory,
+                    reason: "Creating Ticketer Channel"
+                });
+            } catch (error) {
+                if (error instanceof DiscordAPIError) {
+                    if (
+                        error.code === Constants.APIErrors.MISSING_PERMISSIONS
+                    ) {
+                        return message.util?.send(
+                            EMBEDS.FAILURE().setDescription(
+                                MESSAGES.COMMANDS.CONFIG.TICKET_CHANNEL_CONFIG
+                                    .TICKETCHANNEL.ERRORS.MISSING_PERMISSIONS
+                            )
+                        );
+                    }
                 }
+                // TODO Catch all errors
+                this.client.logger.error(error.message);
+                return message.util?.send(
+                    EMBEDS.FAILURE().setDescription(MESSAGES.ERRORS.DEFAULT)
+                );
             }
-            this.client.logger.error(error.message);
-            return message.util?.send(
-                EMBEDS.FAILURE().setDescription(MESSAGES.ERRORS.DEFAULT)
-            );
         }
         const guildMap = this.client.settings.get(
             message.guild!,
-            SETTINGS.TICKETCHANNELS,
-            new Map<string, TicketerChannelClass>()
+            SETTINGS.TICKETCHANNELS
         );
         const newTicketerChannel = new TicketerChannel({
             GUILDID: message.guild!.id,
-            CHANNELID: channel!.id,
+            CHANNELID: channel instanceof TextChannel ? channel!.id : "",
             CATEGORYID: createdCategory
         });
-        guildMap.set(channel!.id, newTicketerChannel);
+        guildMap!.set(
+            channel instanceof TextChannel ? channel!.id : "",
+            newTicketerChannel
+        );
         await this.client.settings.set(
             message.guild!,
             SETTINGS.TICKETCHANNELS,
@@ -125,7 +143,7 @@ export default class TicketChannelCommand extends Command {
         return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
                 MESSAGES.COMMANDS.CONFIG.TICKET_CHANNEL_CONFIG.TICKETCHANNEL.SUCCESS(
-                    channel!.toString()
+                    channel?.toString() ?? "`Not bound`"
                 )
             )
         );
