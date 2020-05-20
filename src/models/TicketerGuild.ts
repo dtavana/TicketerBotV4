@@ -33,7 +33,7 @@ export class TicketerGuild {
     @prop()
     LOGCHANNEL?: string;
 
-    @prop({ default: -1 })
+    @prop({ default: 1 })
     MAXTICKETS?: number;
 
     @prop({ default: false })
@@ -44,6 +44,9 @@ export class TicketerGuild {
 
     @prop({ default: false })
     TRANSCRIPT?: boolean;
+
+    @prop({ default: 0 })
+    CURRENTTICKET?: number;
 
     @mapProp({
         of: TicketerChannel,
