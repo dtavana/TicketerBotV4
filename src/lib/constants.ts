@@ -4,6 +4,7 @@ import { User } from "discord.js";
 import { TicketerChannel } from "../models/TicketerChannel";
 import { TicketerTicket } from "../models/TicketerTicket";
 import { Guild } from "discord.js";
+import { TextChannel } from "discord.js";
 
 export enum SETTINGS {
     GUILDID = "GUILDID",
@@ -14,7 +15,6 @@ export enum SETTINGS {
     MODERATORROLE = "MODERATORROLE",
     TICKETPREFIX = "TICKETPREFIX",
     LOGCHANNEL = "LOGCHANNEL",
-    MAXTICKETS = "MAXTICKETS",
     ENFORCESUBJECT = "ENFORCESUBJECT",
     INACTIVETIME = "INACTIVETIME",
     TRANSCRIPT = "TRANSCRIPT",
@@ -32,7 +32,6 @@ export interface Settings {
     MODERATORROLE: string;
     TICKETPREFIX: string;
     LOGCHANNEL: string;
-    MAXTICKETS: number;
     ENFORCESUBJECT: boolean;
     INACTIVETIME: number;
     TRANSCRIPT: boolean;
@@ -47,7 +46,8 @@ export enum CHANNELMAPSETTINGS {
     CATEGORYID = "CATEGORYID",
     ADMINCLOSE = "ADMINCLOSE",
     MODCLOSE = "MODCLOSE",
-    WELCOMEMESSAGE = "WELCOMEMESSAGE"
+    WELCOMEMESSAGE = "WELCOMEMESSAGE",
+    MAXTICKETS = "MAXTICKETS"
 }
 
 export interface ChannelMapSettings {
@@ -57,6 +57,7 @@ export interface ChannelMapSettings {
     ADMINCLOSE: boolean;
     MODCLOSE: boolean;
     WELCOMEMESSAGE: boolean;
+    MAXTICKETS: number;
 }
 
 export enum TICKETMAPSETTINGS {
@@ -118,7 +119,6 @@ export const COMMAND_NAMES = {
         MODERATORROLE: "moderatorrole",
         TICKETPREFIX: "ticketprefix",
         LOGCHANNEL: "logchannel",
-        MAXTICKETS: "maxtickets",
         ENFORCESUBJECT: "enforcesubject",
         INACTIVETIME: "inactivetime",
         TRANSCRIPT: "transcript",
@@ -126,11 +126,13 @@ export const COMMAND_NAMES = {
             WELCOMEMESSAGE: "welcomemessage",
             ADMINCLOSE: "adminclose",
             MODERATORCLOSE: "moderatorclose",
-            TICKETCHANNEL: "ticketchannel"
+            TICKETCHANNEL: "ticketchannel",
+            MAXTICKETS: "maxtickets"
         }
     },
     INFO: {
-        UPGRADE: "upgrade"
+        UPGRADE: "upgrade",
+        CHANNELS: "channels"
     },
     CREDITS: {
         REDEEM: "redeem",
@@ -140,7 +142,7 @@ export const COMMAND_NAMES = {
 
 export const PREMIUM_COMMANDS = [
     COMMAND_NAMES.CONFIG.TICKETPREFIX,
-    COMMAND_NAMES.CONFIG.MAXTICKETS,
+    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.MAXTICKETS,
     COMMAND_NAMES.CONFIG.ENFORCESUBJECT,
     COMMAND_NAMES.CONFIG.INACTIVETIME,
     COMMAND_NAMES.CONFIG.TRANSCRIPT,
@@ -228,16 +230,6 @@ export const MESSAGES = {
                 SUCCESS: (old: string, target: string) =>
                     `Old Log Channel: ${old}\nNew Log Channel: ${target}`
             },
-            MAXTICKETS: {
-                PROMPT: {
-                    START: (author?: User) =>
-                        `${author}, what would you like to set as the maximum number of tickets? **NOTE:** -1 will allow for unlimited tickets`,
-                    RETRY: (author?: User) =>
-                        `${author}, please enter a number.`
-                },
-                SUCCESS: (old: string, target: string) =>
-                    `Old Max Tickets: \`${old}\`\nNew Max Tickets: \`${target}\``
-            },
             ENFORCESUBJECT: {
                 PROMPT: {
                     START: (author?: User) =>
@@ -269,6 +261,16 @@ export const MESSAGES = {
                     `Old Transcript: \`${old}\`\nNew Transcript: \`${target}\``
             },
             TICKET_CHANNEL_CONFIG: {
+                MAXTICKETS: {
+                    PROMPT: {
+                        START: (author?: User) =>
+                            `${author}, what would you like to set as the maximum number of tickets? **NOTE:** -1 will allow for unlimited tickets`,
+                        RETRY: (author?: User) =>
+                            `${author}, please enter a number.`
+                    },
+                    SUCCESS: (old: number, target: number) =>
+                        `Old Max Tickets: \`${old}\`\nNew Max Tickets: \`${target}\``
+                },
                 MODERATORCLOSE: {
                     PROMPT: {
                         START: (author?: User) =>
@@ -312,14 +314,27 @@ export const MESSAGES = {
                         INVALID_TARGET: (author?: User) =>
                             `${author}, \`true\` is an invalid option for this argument. Please only enter a name for the new channel or enter \`false\` to allow new tickets to be created in any channel.`,
                         MISSING_PERMISSIONS:
-                            "I am missing permissions to create channels, check that I have the **Manage Channels** permission enabled"
+                            "I am missing permissions to create channels, check that I have the **Manage Channels** permission enabled."
                     },
                     SUCCESS: (target: string) => `New Ticket Channel: ${target}`
                 }
             }
         },
         TICKETS: {
-            NEW: {}
+            NEW: {
+                ERRORS: {
+                    INVALID_TICKET_CHANNEL: (author: User, prefix: string) =>
+                        `${author}, you can not create a ticket in this channel, to view valid channels, use \`${prefix}${COMMAND_NAMES.INFO.CHANNELS}\`.`,
+                    TAG_USER_AS_SUBJECT: (author: User) =>
+                        `${author}, you can not tag a user as your subject if you are not a Ticketer Moderator/Administrator.`,
+                    SUBJECT_NEEDED: (author: User) =>
+                        `${author}, tickets require subjects in this guild.`,
+                    MAX_TICKETS: (author: User) =>
+                        `${author}, you can not create anymore tickets in this category.`
+                },
+                SUCCESS: (author: User, channel: TextChannel) =>
+                    `${author}, your ticket has been opened: ${channel}`
+            }
         }
     },
     COMMAND_HANDLER: {
@@ -408,8 +423,6 @@ export const COMMAND_DESCRIPTIONS = {
         TICKETPREFIX: "Use this command to set the ticket prefix",
         LOGCHANNEL:
             "Use this command to set the log channel. This is where transcripts and other information about tickets will be posted",
-        MAXTICKETS:
-            "Use this command to set the maximum number of tickets. **NOTE:** **-1** will allow for an unlimited number of tickets per user",
         ENFORCESUBJECT:
             "Use this command to set the whether or not a subject must be used when creating a ticket",
         INACTIVETIME:
@@ -417,6 +430,8 @@ export const COMMAND_DESCRIPTIONS = {
         TRANSCRIPT:
             "Use this command to set whether or not transcripts should be generated a ticket is closed",
         TICKET_CHANNEL_CONFIG: {
+            MAXTICKETS:
+                "Use this command to set the maximum number of tickets. **NOTE:** **-1** will allow for an unlimited number of tickets per user",
             MODERATORCLOSE:
                 "Use this command to set whether or not to disallow non moderators/admins from closing tickets. **NOTE:** this is overwritten by if set to admin close is set to **true**",
             ADMINCLOSE:

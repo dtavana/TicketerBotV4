@@ -19,6 +19,9 @@ export class TicketerChannel {
 
     @prop({ default: DEFAULT_SETTINGS.WELCOME_MESSAGE })
     WELCOMEMESSAGE?: string;
+
+    @prop({ default: 1 })
+    MAXTICKETS?: number;
 }
 
 export default getModelForClass(TicketerChannel);

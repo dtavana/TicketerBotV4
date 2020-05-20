@@ -33,9 +33,6 @@ export class TicketerGuild {
     @prop()
     LOGCHANNEL?: string;
 
-    @prop({ default: 1 })
-    MAXTICKETS?: number;
-
     @prop({ default: false })
     ENFORCESUBJECT?: boolean;
 
