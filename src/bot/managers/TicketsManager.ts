@@ -1,4 +1,4 @@
-import { SETTINGS } from "../../lib/constants";
+import { SETTINGS, EMBEDS, MESSAGES } from "../../lib/constants";
 import { AkairoClient } from "discord-akairo";
 import { Guild } from "discord.js";
 import { User } from "discord.js";
@@ -133,7 +133,13 @@ export default class TicketsManager {
             SETTINGS.CURRENTTICKET,
             currentTicket! + 1
         );
-        // Send to log channel
-        console.log(5);
+        message.util?.send(
+            EMBEDS.SUCCESS().setDescription(
+                MESSAGES.COMMANDS.TICKETS.NEW.SUCCESS(
+                    author.user,
+                    newTicketChannel
+                )
+            )
+        );
     }
 }

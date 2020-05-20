@@ -39,8 +39,14 @@ export default class NewCommand extends Command {
         const resolvedTicketChannel = ticketChannels!.get(message.channel.id);
         const ticketChannel = resolvedTicketChannel ?? nonTicketChannel;
         if (ticketChannel === undefined) {
-            // Return invalid ticket channel
-            return console.log(1);
+            return message.util?.send(
+                EMBEDS.FAILURE().setDescription(
+                    MESSAGES.COMMANDS.TICKETS.NEW.ERRORS.INVALID_TICKET_CHANNEL(
+                        message.author,
+                        message.guild?.prefix!
+                    )
+                )
+            );
         }
 
         let subject = DEFAULT_SETTINGS.SUBJECT;
@@ -59,8 +65,13 @@ export default class NewCommand extends Command {
                 moderatorRole?.id ?? ""
             );
             if (!hasAdminRole && !hadModeratorRole) {
-                // Return can not tag a user as a subject if not an admin
-                return console.log(2);
+                return message.util?.send(
+                    EMBEDS.FAILURE().setDescription(
+                        MESSAGES.COMMANDS.TICKETS.NEW.ERRORS.TAG_USER_AS_SUBJECT(
+                            message.author
+                        )
+                    )
+                );
             }
         } else {
             if (target === DEFAULT_SETTINGS.SUBJECT) {
@@ -70,7 +81,13 @@ export default class NewCommand extends Command {
                     false
                 );
                 if (enforceSubject) {
-                    return console.log(3);
+                    return message.util?.send(
+                        EMBEDS.FAILURE().setDescription(
+                            MESSAGES.COMMANDS.TICKETS.NEW.ERRORS.SUBJECT_NEEDED(
+                                message.author
+                            )
+                        )
+                    );
                 }
                 subject = target;
                 target = message.member!;
@@ -80,13 +97,15 @@ export default class NewCommand extends Command {
             message.guild!,
             target as GuildMember
         );
-        const maxTickets = this.client.settings.get(
-            message.guild!,
-            SETTINGS.MAXTICKETS,
-            1
-        );
-        if (maxTickets !== -1 && currentAuthorTickets!.size >= maxTickets) {
-            return console.log(4);
+        const maxTickets = ticketChannel.MAXTICKETS;
+        if (maxTickets !== -1 && currentAuthorTickets!.size >= maxTickets!) {
+            return message.util?.send(
+                EMBEDS.FAILURE().setDescription(
+                    MESSAGES.COMMANDS.TICKETS.NEW.ERRORS.MAX_TICKETS(
+                        message.author
+                    )
+                )
+            );
         }
 
         return this.client.tickets.openNewTicket(
