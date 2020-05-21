@@ -150,7 +150,7 @@ export default class TicketsManager {
         const resolvedLogChannel = await this.client.channels.resolve(
             logChannelId ?? ""
         );
-        (resolvedLogChannel as TextChannel).send(
+        (resolvedLogChannel as TextChannel)?.send(
             EMBEDS.LOG().setDescription(
                 MESSAGES.TICKETS.LOG_OPENED(author.user, ticketName)
             )
