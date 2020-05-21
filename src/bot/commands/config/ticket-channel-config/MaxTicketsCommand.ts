@@ -71,8 +71,8 @@ export default class MaxTicketsCommand extends Command {
         return message.util?.send(
             EMBEDS.SUCCESS().setDescription(
                 MESSAGES.COMMANDS.CONFIG.TICKET_CHANNEL_CONFIG.MAXTICKETS.SUCCESS(
-                    maxTickets!,
-                    target
+                    maxTickets! === -1 ? "Unlimited" : maxTickets!,
+                    target === -1 ? "Unlimited" : target
                 )
             )
         );
