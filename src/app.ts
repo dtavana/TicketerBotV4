@@ -1,6 +1,6 @@
 import loadEnv from "./lib/loadEnv";
 import TicketerBot from "./bot/client/TicketerBot";
-import { TOPICS, EVENTS } from "./utils/logger";
+import { EVENTS, TOPICS } from "./utils/logger";
 
 loadEnv("environment.yml");
 

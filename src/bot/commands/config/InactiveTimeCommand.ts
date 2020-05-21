@@ -3,10 +3,10 @@ import { Message } from "discord.js";
 import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
-    SETTINGS,
-    EMBEDS,
     COMMAND_NAMES,
-    MESSAGES
+    EMBEDS,
+    MESSAGES,
+    SETTINGS
 } from "../../../lib/constants";
 import timeConversion from "../../../utils/timeConversion";
 

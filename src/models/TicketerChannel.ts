@@ -1,4 +1,4 @@
-import { prop, getModelForClass } from "@typegoose/typegoose";
+import { getModelForClass, prop } from "@typegoose/typegoose";
 import { DEFAULT_SETTINGS } from "../lib/constants";
 
 export class TicketerChannel {

@@ -1,8 +1,8 @@
 import { Inhibitor } from "discord-akairo";
 import { Message } from "discord.js";
 import {
-    SETTINGS,
     COMMAND_CATEGORIES,
+    SETTINGS,
     SETTINGS_PERMISSION
 } from "../../lib/constants";
 import { Command } from "discord-akairo";

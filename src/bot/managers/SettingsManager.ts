@@ -6,13 +6,13 @@ import TicketerGuild, {
 } from "../../models/TicketerGuild";
 import { Guild } from "discord.js";
 import { AkairoClient } from "discord-akairo";
-import { TOPICS, EVENTS } from "../../utils/logger";
+import { EVENTS, TOPICS } from "../../utils/logger";
 import {
     CLIENT_OPTIONS,
+    ChannelMapSettings,
+    MESSAGES,
     SETTINGS,
     Settings,
-    MESSAGES,
-    ChannelMapSettings,
     TicketMapSettings
 } from "../../lib/constants";
 import { DocumentType } from "@typegoose/typegoose";

@@ -2,11 +2,11 @@ import { Inhibitor } from "discord-akairo";
 import { Message } from "discord.js";
 import {
     COMMAND_NAMES,
-    SETTINGS,
-    MAX_PREMIUM_TICKETCHANNELS,
     EMBEDS,
+    MAX_PREMIUM_TICKETCHANNELS,
+    MAX_REGULAR_TICKETCHANNELS,
     MESSAGES,
-    MAX_REGULAR_TICKETCHANNELS
+    SETTINGS
 } from "../../lib/constants";
 import { Command } from "discord-akairo";
 import { TicketerChannel } from "../../models/TicketerChannel";

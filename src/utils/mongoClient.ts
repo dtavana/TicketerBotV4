@@ -1,4 +1,4 @@
-import { connect, Mongoose } from "mongoose";
+import { Mongoose, connect } from "mongoose";
 
 const _connect = (): Promise<Mongoose> => {
     return connect(process.env.MONGO_URL, {

@@ -1,13 +1,13 @@
-import { Command, Argument } from "discord-akairo";
-import { Message, GuildMember } from "discord.js";
+import { Argument, Command } from "discord-akairo";
+import { GuildMember, Message } from "discord.js";
 import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
-    SETTINGS,
+    COMMAND_NAMES,
+    DEFAULT_SETTINGS,
     EMBEDS,
     MESSAGES,
-    COMMAND_NAMES,
-    DEFAULT_SETTINGS
+    SETTINGS
 } from "../../../lib/constants";
 
 export default class NewCommand extends Command {

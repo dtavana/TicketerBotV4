@@ -3,13 +3,13 @@ import { Message } from "discord.js";
 import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
-    SETTINGS,
-    EMBEDS,
     COMMAND_NAMES,
-    MESSAGES
+    EMBEDS,
+    MESSAGES,
+    SETTINGS
 } from "../../../../lib/constants";
 import { CategoryChannel } from "discord.js";
-import { DiscordAPIError, Constants } from "discord.js";
+import { Constants, DiscordAPIError } from "discord.js";
 import { TextChannel } from "discord.js";
 import TicketerChannel from "../../../../models/TicketerChannel";
 

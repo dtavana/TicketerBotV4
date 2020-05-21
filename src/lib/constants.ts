@@ -1,10 +1,7 @@
-import { MessageEmbed } from "discord.js";
+import { Guild, MessageEmbed, TextChannel, User } from "discord.js";
 import { AkairoClient } from "discord-akairo";
-import { User } from "discord.js";
 import { TicketerChannel } from "../models/TicketerChannel";
 import { TicketerTicket } from "../models/TicketerTicket";
-import { Guild } from "discord.js";
-import { TextChannel } from "discord.js";
 
 export enum SETTINGS {
     GUILDID = "GUILDID",
@@ -93,6 +90,12 @@ export const EMBEDS = {
         return new MessageEmbed()
             .setFooter(CLIENT_OPTIONS.FOOTER_TEXT)
             .setColor("RED")
+            .setTimestamp();
+    },
+    LOG: () => {
+        return new MessageEmbed()
+            .setFooter(CLIENT_OPTIONS.FOOTER_TEXT)
+            .setColor("LUMINOUS_VIVID_PINK")
             .setTimestamp();
     },
     PROMPT: (text: string): MessageEmbed => {
@@ -381,6 +384,10 @@ export const MESSAGES = {
     },
     SETTINGS_MANAGER: {
         LOADED: "Settings manager has been loaded!"
+    },
+    TICKETS: {
+        LOG_OPENED: (author: User, ticketName: string) =>
+            `\`${author.tag}\` opened a new ticket: ${ticketName}`
     },
     PREMIUM_BLOCKED: (prefix: string) =>
         `This command requires premium. Consider upgrading using \`${prefix}${COMMAND_NAMES.INFO.UPGRADE}\`. If you believe you already have a credit, use \`${prefix}${COMMAND_NAMES.CREDITS.REDEEM}\` to enable premium on this server. You can view all of your credits using \`${prefix}${COMMAND_NAMES.CREDITS.CREDITS}\``,

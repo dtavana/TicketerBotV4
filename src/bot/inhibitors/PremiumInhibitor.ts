@@ -1,10 +1,10 @@
 import { Inhibitor } from "discord-akairo";
 import { Message } from "discord.js";
 import {
-    SETTINGS,
-    PREMIUM_COMMANDS,
     EMBEDS,
-    MESSAGES
+    MESSAGES,
+    PREMIUM_COMMANDS,
+    SETTINGS
 } from "../../lib/constants";
 import { Command } from "discord-akairo";
 

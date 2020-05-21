@@ -1,6 +1,6 @@
 import { Listener } from "discord-akairo";
 import { MESSAGES } from "../../../lib/constants";
-import { TOPICS, EVENTS } from "../../../utils/logger";
+import { EVENTS, TOPICS } from "../../../utils/logger";
 import { Guild } from "discord.js";
 
 export default class GuildCreateListener extends Listener {

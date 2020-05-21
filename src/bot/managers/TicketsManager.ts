@@ -1,14 +1,18 @@
-import { SETTINGS, EMBEDS, MESSAGES } from "../../lib/constants";
-import { AkairoClient } from "discord-akairo";
-import { Guild } from "discord.js";
-import { User } from "discord.js";
-import { TicketerChannel } from "../../models/TicketerChannel";
-import { GuildMember } from "discord.js";
-import { OverwriteData } from "discord.js";
+import {
+    Guild,
+    GuildMember,
+    Message,
+    OverwriteData,
+    TextChannel,
+    User
+} from "discord.js";
+// eslint-disable-next-line sort-imports
+import { EMBEDS, MESSAGES, SETTINGS } from "../../lib/constants";
 import TicketerTicket, {
     TicketerTicket as TicketerTicketClass
 } from "../../models/TicketerTicket";
-import { Message } from "discord.js";
+import { AkairoClient } from "discord-akairo";
+import { TicketerChannel } from "../../models/TicketerChannel";
 
 export default class TicketsManager {
     private client: AkairoClient;
@@ -109,15 +113,13 @@ export default class TicketsManager {
                 type: "role"
             });
         }
-        const newTicketChannel = await guild.channels.create(
-            `${ticketPrefix}-${currentTicket}`,
-            {
-                topic: `Ticket channel created by Ticketer for ${author.user.tag}`,
-                parent: ticketChannel?.CATEGORYID,
-                permissionOverwrites,
-                reason: `Creating a ticket for ${author.user.tag}`
-            }
-        );
+        const ticketName = `${ticketPrefix}-${currentTicket}`;
+        const newTicketChannel = await guild.channels.create(ticketName, {
+            topic: `Ticket channel created by Ticketer for ${author.user.tag}`,
+            parent: ticketChannel?.CATEGORYID,
+            permissionOverwrites,
+            reason: `Creating a ticket for ${author.user.tag}`
+        });
         const guildMap = this.client.settings.get(guild, SETTINGS.TICKETS);
         const newTicketerTicket = new TicketerTicket({
             GUILDID: guild.id,
@@ -139,6 +141,18 @@ export default class TicketsManager {
                     author.user,
                     newTicketChannel
                 )
+            )
+        );
+        const logChannelId = this.client.settings.get(
+            guild,
+            SETTINGS.LOGCHANNEL
+        );
+        const resolvedLogChannel = await this.client.channels.resolve(
+            logChannelId ?? ""
+        );
+        (resolvedLogChannel as TextChannel).send(
+            EMBEDS.LOG().setDescription(
+                MESSAGES.TICKETS.LOG_OPENED(author.user, ticketName)
             )
         );
     }

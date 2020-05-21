@@ -3,10 +3,10 @@ import { Message } from "discord.js";
 import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
-    SETTINGS,
+    COMMAND_NAMES,
     EMBEDS,
     MESSAGES,
-    COMMAND_NAMES
+    SETTINGS
 } from "../../../lib/constants";
 import { User } from "discord.js";
 

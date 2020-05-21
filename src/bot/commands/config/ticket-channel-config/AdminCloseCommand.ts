@@ -1,13 +1,13 @@
 import { Command } from "discord-akairo";
 import { Message } from "discord.js";
 import {
+    CHANNELMAPSETTINGS,
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
-    SETTINGS,
-    EMBEDS,
     COMMAND_NAMES,
+    EMBEDS,
     MESSAGES,
-    CHANNELMAPSETTINGS
+    SETTINGS
 } from "../../../../lib/constants";
 import { TicketerChannel } from "../../../../models/TicketerChannel";
 

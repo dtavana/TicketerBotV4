@@ -1,14 +1,13 @@
-import { Command } from "discord-akairo";
-import { Message } from "discord.js";
 import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
-    SETTINGS,
-    EMBEDS,
     COMMAND_NAMES,
-    MESSAGES
+    EMBEDS,
+    MESSAGES,
+    SETTINGS
 } from "../../../lib/constants";
-import { TextChannel } from "discord.js";
+import { Message, TextChannel } from "discord.js";
+import { Command } from "discord-akairo";
 
 export default class LogChannelCommand extends Command {
     public constructor() {

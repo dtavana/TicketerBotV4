@@ -1,8 +1,8 @@
 import {
-    prop,
-    getModelForClass,
     arrayProp,
-    mapProp
+    getModelForClass,
+    mapProp,
+    prop
 } from "@typegoose/typegoose";
 import { DEFAULT_SETTINGS } from "../lib/constants";
 import { TicketerChannel } from "./TicketerChannel";

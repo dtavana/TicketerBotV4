@@ -6,15 +6,15 @@ import {
 } from "discord-akairo";
 import { join } from "path";
 import {
-    MESSAGES,
     CLIENT_OPTIONS,
-    SETTINGS,
-    EMBEDS
+    EMBEDS,
+    MESSAGES,
+    SETTINGS
 } from "../../lib/constants";
 import SettingsManager from "../managers/SettingsManager";
 import TicketerGuild from "../../models/TicketerGuild";
 import { Logger } from "winston";
-import logger, { TOPICS, EVENTS } from "../../utils/logger";
+import logger, { EVENTS, TOPICS } from "../../utils/logger";
 import { Message } from "discord.js";
 import { Flag } from "discord-akairo";
 import TicketerManager from "../managers/TicketsManager";
