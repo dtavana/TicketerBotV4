@@ -94,6 +94,7 @@ export const EMBEDS = {
     },
     LOG: () => {
         return new MessageEmbed()
+            .setTitle("Log")
             .setFooter(CLIENT_OPTIONS.FOOTER_TEXT)
             .setColor("LUMINOUS_VIVID_PINK")
             .setTimestamp();
@@ -271,7 +272,10 @@ export const MESSAGES = {
                         RETRY: (author?: User) =>
                             `${author}, please enter a number.`
                     },
-                    SUCCESS: (old: number, target: number) =>
+                    SUCCESS: (
+                        old: number | "Unlimited",
+                        target: number | "Unlimited"
+                    ) =>
                         `Old Max Tickets: \`${old}\`\nNew Max Tickets: \`${target}\``
                 },
                 MODERATORCLOSE: {
@@ -387,7 +391,7 @@ export const MESSAGES = {
     },
     TICKETS: {
         LOG_OPENED: (author: User, ticketName: string) =>
-            `\`${author.tag}\` opened a new ticket: ${ticketName}`
+            `**${author.tag}** opened a new ticket: **${ticketName}**`
     },
     PREMIUM_BLOCKED: (prefix: string) =>
         `This command requires premium. Consider upgrading using \`${prefix}${COMMAND_NAMES.INFO.UPGRADE}\`. If you believe you already have a credit, use \`${prefix}${COMMAND_NAMES.CREDITS.REDEEM}\` to enable premium on this server. You can view all of your credits using \`${prefix}${COMMAND_NAMES.CREDITS.CREDITS}\``,
