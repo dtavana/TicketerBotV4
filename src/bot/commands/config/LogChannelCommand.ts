@@ -38,7 +38,7 @@ export default class LogChannelCommand extends Command {
     public async exec(message: Message, { target }: { target: TextChannel }) {
         let textChannel: string | undefined = await this.client.settings.set(
             message.guild!,
-            SETTINGS.MODERATORROLE,
+            SETTINGS.LOGCHANNEL,
             target.id
         );
         if (textChannel === undefined) {
