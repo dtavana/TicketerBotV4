@@ -44,9 +44,9 @@ export default class TicketChannelCommand extends Command {
                     }
                 },
                 {
-                    id: "category",
-                    type: "boolean",
-                    default: true
+                    id: "noCategory",
+                    match: "flag",
+                    flag: "--noCategory"
                 }
             ]
         });
@@ -54,8 +54,9 @@ export default class TicketChannelCommand extends Command {
 
     public async exec(
         message: Message,
-        { target, category }: { target: string; category: boolean }
+        { target, noCategory }: { target: string; noCategory: boolean }
     ) {
+        console.log(noCategory);
         const ticketChannelExists = this.client.settings
             .get(message.guild!, SETTINGS.TICKETCHANNELS)!
             .has("");
@@ -69,7 +70,7 @@ export default class TicketChannelCommand extends Command {
             );
         }
         let createdCategory: CategoryChannel | string | undefined = undefined;
-        if (category) {
+        if (!noCategory) {
             try {
                 createdCategory = await message.guild?.channels.create(
                     `${target === "false" ? "ticket" : target}-category`,
