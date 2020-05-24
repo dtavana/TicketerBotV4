@@ -193,7 +193,7 @@ export const MESSAGES = {
             }
         },
         CONFIG: {
-            NOTSET: "Not set",
+            NOTSET: "`Not set`",
             ADMINROLE: {
                 PROMPT: {
                     START: (author?: User) =>
@@ -389,9 +389,10 @@ export const MESSAGES = {
     SETTINGS_MANAGER: {
         LOADED: "Settings manager has been loaded!"
     },
-    TICKETS: {
-        LOG_OPENED: (author: User, ticketName: string) =>
-            `**${author.tag}** opened a new ticket: **${ticketName}**`
+    LOGGING: {
+        SUBJECT_FIELD: "Subject",
+        TICKET_OPENED: (author: User, ticketName: string) =>
+            `**${author.tag}** opened **${ticketName}**`
     },
     PROCESS: {
         DESTROY_CLIENT: "Detected a need to destroy the client. Logging out."
