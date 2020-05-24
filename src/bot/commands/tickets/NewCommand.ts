@@ -97,9 +97,10 @@ export default class NewCommand extends Command {
                 target = message.member!;
             }
         }
-        const currentAuthorTickets = this.client.tickets.getTicketsByAuthor(
+        const currentAuthorTickets = this.client.tickets.getTicketsByAuthorAndChannel(
             message.guild!,
-            target as GuildMember
+            target as GuildMember,
+            message.channel
         );
         const maxTickets = ticketChannel.MAXTICKETS;
         if (maxTickets !== -1 && currentAuthorTickets!.size >= maxTickets!) {
