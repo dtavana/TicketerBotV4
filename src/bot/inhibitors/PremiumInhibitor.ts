@@ -1,4 +1,4 @@
-import { Inhibitor } from "discord-akairo";
+import { Inhibitor, Command } from "discord-akairo";
 import { Message } from "discord.js";
 import {
     EMBEDS,
@@ -6,7 +6,6 @@ import {
     PREMIUM_COMMANDS,
     SETTINGS
 } from "../../lib/constants";
-import { Command } from "discord-akairo";
 
 export default class PremiumInhibitor extends Inhibitor {
     public constructor() {

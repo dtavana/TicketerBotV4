@@ -1,4 +1,4 @@
-import { Inhibitor } from "discord-akairo";
+import { Inhibitor, Command } from "discord-akairo";
 import { Message } from "discord.js";
 import {
     COMMAND_NAMES,
@@ -8,7 +8,7 @@ import {
     MESSAGES,
     SETTINGS
 } from "../../lib/constants";
-import { Command } from "discord-akairo";
+
 import { TicketerChannel } from "../../models/TicketerChannel";
 
 export default class TicketChannelInhibitor extends Inhibitor {

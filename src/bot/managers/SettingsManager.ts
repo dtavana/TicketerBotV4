@@ -1,11 +1,11 @@
 import { Mongoose } from "mongoose";
 import mongoClient from "../../utils/mongoClient";
-import { Provider } from "discord-akairo";
+import { Provider, AkairoClient } from "discord-akairo";
 import TicketerGuild, {
     TicketerGuild as TicketerGuildClass
 } from "../../models/TicketerGuild";
-import { Guild } from "discord.js";
-import { AkairoClient } from "discord-akairo";
+import { Guild, Role } from "discord.js";
+
 import { EVENTS, TOPICS } from "../../utils/logger";
 import {
     CLIENT_OPTIONS,
@@ -18,7 +18,6 @@ import {
 import { DocumentType } from "@typegoose/typegoose";
 import { TicketerChannel } from "../../models/TicketerChannel";
 import { TicketerTicket } from "../../models/TicketerTicket";
-import { Role } from "discord.js";
 
 export default class SettingsManager extends Provider {
     public ["constructor"]: typeof SettingsManager;

@@ -1,5 +1,11 @@
 import { Command } from "discord-akairo";
-import { Message } from "discord.js";
+import {
+    Message,
+    CategoryChannel,
+    Constants,
+    DiscordAPIError,
+    TextChannel
+} from "discord.js";
 import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
@@ -8,9 +14,7 @@ import {
     MESSAGES,
     SETTINGS
 } from "../../../../lib/constants";
-import { CategoryChannel } from "discord.js";
-import { Constants, DiscordAPIError } from "discord.js";
-import { TextChannel } from "discord.js";
+
 import TicketerChannel from "../../../../models/TicketerChannel";
 
 export default class TicketChannelCommand extends Command {

@@ -1,11 +1,10 @@
-import { Inhibitor } from "discord-akairo";
+import { Inhibitor, Command } from "discord-akairo";
 import { Message } from "discord.js";
 import {
     COMMAND_CATEGORIES,
     SETTINGS,
     SETTINGS_PERMISSION
 } from "../../lib/constants";
-import { Command } from "discord-akairo";
 
 export default class ModerationInhibitor extends Inhibitor {
     public constructor() {

@@ -1,4 +1,4 @@
-import { Command } from "discord-akairo";
+import { Command, Argument } from "discord-akairo";
 import { Message } from "discord.js";
 import {
     CHANNELMAPSETTINGS,
@@ -6,10 +6,9 @@ import {
     COMMAND_DESCRIPTIONS,
     COMMAND_NAMES,
     EMBEDS,
-    MESSAGES,
-    SETTINGS
+    MESSAGES
 } from "../../../../lib/constants";
-import { Argument } from "discord-akairo";
+
 import { TicketerChannel } from "../../../../models/TicketerChannel";
 
 export default class WelcomeMessageCommand extends Command {

@@ -1,5 +1,5 @@
 import { Command } from "discord-akairo";
-import { Message } from "discord.js";
+import { Message, User } from "discord.js";
 import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
@@ -8,7 +8,6 @@ import {
     MESSAGES,
     SETTINGS
 } from "../../../lib/constants";
-import { User } from "discord.js";
 
 export default class UnblacklistCommand extends Command {
     public constructor() {

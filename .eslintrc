@@ -6,7 +6,10 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
-        "prettier"
+        "prettier",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript"
     ],
     "rules": {
         "no-unmodified-loop-condition": 2,
@@ -17,7 +20,6 @@
         "lines-between-class-members": 0,
         "@typescript-eslint/no-non-null-assertion": 0,
         "@typescript-eslint/no-explicit-any": 0,
-        "no-duplicate-imports": 1,
-        "sort-imports": 1
+        "import/no-named-as-default": 0
     }
 }

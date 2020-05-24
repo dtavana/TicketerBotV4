@@ -6,8 +6,7 @@ import {
     COMMAND_DESCRIPTIONS,
     COMMAND_NAMES,
     EMBEDS,
-    MESSAGES,
-    SETTINGS
+    MESSAGES
 } from "../../../../lib/constants";
 import { TicketerChannel } from "../../../../models/TicketerChannel";
 

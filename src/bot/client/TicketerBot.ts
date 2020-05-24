@@ -2,7 +2,8 @@ import {
     AkairoClient,
     CommandHandler,
     InhibitorHandler,
-    ListenerHandler
+    ListenerHandler,
+    Flag
 } from "discord-akairo";
 import { join } from "path";
 import {
@@ -16,9 +17,8 @@ import TicketerGuild from "../../models/TicketerGuild";
 import { Logger } from "winston";
 import logger, { EVENTS, TOPICS } from "../../utils/logger";
 import { Message } from "discord.js";
-import { Flag } from "discord-akairo";
+
 import TicketerManager from "../managers/TicketsManager";
-import { Client } from "discord.js";
 
 declare module "discord-akairo" {
     interface AkairoClient {

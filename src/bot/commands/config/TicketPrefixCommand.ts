@@ -1,4 +1,4 @@
-import { Command } from "discord-akairo";
+import { Command, Argument } from "discord-akairo";
 import { Message } from "discord.js";
 import {
     COMMAND_CATEGORIES,
@@ -8,7 +8,6 @@ import {
     MESSAGES,
     SETTINGS
 } from "../../../lib/constants";
-import { Argument } from "discord-akairo";
 
 export default class TicketPrefixCommand extends Command {
     public constructor() {
