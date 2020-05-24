@@ -1,8 +1,14 @@
-import { Guild, MessageEmbed, TextChannel, User } from "discord.js";
+import {
+    Guild,
+    MessageEmbed,
+    TextChannel,
+    User,
+    Permissions
+} from "discord.js";
 import { AkairoClient } from "discord-akairo";
 import { TicketerChannel } from "../models/TicketerChannel";
 import { TicketerTicket } from "../models/TicketerTicket";
-import { Permissions } from "discord.js";
+
 import { stripIndents } from "common-tags";
 
 export enum SETTINGS {
@@ -12,7 +18,6 @@ export enum SETTINGS {
     BLACKLIST = "BLACKLIST",
     ADMINROLE = "ADMINROLE",
     MODERATORROLE = "MODERATORROLE",
-    TICKETPREFIX = "TICKETPREFIX",
     LOGCHANNEL = "LOGCHANNEL",
     ENFORCESUBJECT = "ENFORCESUBJECT",
     INACTIVETIME = "INACTIVETIME",
@@ -29,7 +34,6 @@ export interface Settings {
     BLACKLIST: string[];
     ADMINROLE: string;
     MODERATORROLE: string;
-    TICKETPREFIX: string;
     LOGCHANNEL: string;
     ENFORCESUBJECT: boolean;
     INACTIVETIME: number;
@@ -44,6 +48,7 @@ export enum CHANNELMAPSETTINGS {
     CHANNELID = "CHANNELID",
     CATEGORYID = "CATEGORYID",
     ADMINCLOSE = "ADMINCLOSE",
+    TICKETPREFIX = "TICKETPREFIX",
     MODCLOSE = "MODCLOSE",
     WELCOMEMESSAGE = "WELCOMEMESSAGE",
     MAXTICKETS = "MAXTICKETS"
@@ -54,6 +59,7 @@ export interface ChannelMapSettings {
     CHANNELID: string;
     CATEGORYID: string;
     ADMINCLOSE: boolean;
+    TICKETPREFIX: string;
     MODCLOSE: boolean;
     WELCOMEMESSAGE: boolean;
     MAXTICKETS: number;
@@ -123,7 +129,6 @@ export const COMMAND_NAMES = {
         SETUP: "setup",
         ADMINROLE: "adminrole",
         MODERATORROLE: "moderatorrole",
-        TICKETPREFIX: "ticketprefix",
         LOGCHANNEL: "logchannel",
         ENFORCESUBJECT: "enforcesubject",
         INACTIVETIME: "inactivetime",
@@ -132,6 +137,7 @@ export const COMMAND_NAMES = {
             WELCOMEMESSAGE: "welcomemessage",
             ADMINCLOSE: "adminclose",
             MODERATORCLOSE: "moderatorclose",
+            TICKETPREFIX: "ticketprefix",
             TICKETCHANNEL: "ticketchannel",
             MAXTICKETS: "maxtickets"
         }
@@ -148,7 +154,7 @@ export const COMMAND_NAMES = {
 };
 
 export const PREMIUM_COMMANDS = [
-    COMMAND_NAMES.CONFIG.TICKETPREFIX,
+    COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.TICKETPREFIX,
     COMMAND_NAMES.CONFIG.TICKET_CHANNEL_CONFIG.MAXTICKETS,
     COMMAND_NAMES.CONFIG.ENFORCESUBJECT,
     COMMAND_NAMES.CONFIG.INACTIVETIME,
@@ -216,16 +222,6 @@ export const MESSAGES = {
                 },
                 SUCCESS: (old: string, target: string) =>
                     `Old Moderator Role: ${old}\nNew Moderator Role: ${target}`
-            },
-            TICKETPREFIX: {
-                PROMPT: {
-                    START: (author?: User) =>
-                        `${author}, what would you like to set as the ticket prefix?`,
-                    RETRY: (author?: User) =>
-                        `${author}, please type a string less than 10 characters.`
-                },
-                SUCCESS: (old: string, target: string) =>
-                    `Old Ticket Prefix: \`${old}\`\nNew Ticket Prefix: \`${target}\``
             },
             LOGCHANNEL: {
                 PROMPT: {
@@ -310,6 +306,16 @@ export const MESSAGES = {
                     },
                     SUCCESS: (target: string) =>
                         `New Welcome Message: ${target}`
+                },
+                TICKETPREFIX: {
+                    PROMPT: {
+                        START: (author?: User) =>
+                            `${author}, what would you like to set as the ticket prefix?`,
+                        RETRY: (author?: User) =>
+                            `${author}, please type a string less than 10 characters.`
+                    },
+                    SUCCESS: (old: string, target: string) =>
+                        `Old Ticket Prefix: \`${old}\`\nNew Ticket Prefix: \`${target}\``
                 },
                 TICKETCHANNEL: {
                     PROMPT: {
@@ -447,7 +453,6 @@ export const COMMAND_DESCRIPTIONS = {
     CONFIG: {
         ADMINROLE: "Use this command to set the administrator role",
         MODERATORROLE: "Use this command to set the moderator role",
-        TICKETPREFIX: "Use this command to set the ticket prefix",
         LOGCHANNEL:
             "Use this command to set the log channel. This is where transcripts and other information about tickets will be posted",
         ENFORCESUBJECT:
@@ -463,6 +468,7 @@ export const COMMAND_DESCRIPTIONS = {
                 "Use this command to set whether or not to disallow non moderators/admins from closing tickets. **NOTE:** this is overwritten by if set to admin close is set to **true**",
             ADMINCLOSE:
                 "Use this command to set whether or not to disallow non admins from closing tickets. **NOTE:** this will overwrite moderator close if set to **true**",
+            TICKETPREFIX: "Use this command to set the ticket prefix",
             WELCOMEMESSAGE:
                 "Use this command to set the text sent at the beggining of a ticket",
             TICKETCHANNEL: "Use this command to create a new ticket channel"

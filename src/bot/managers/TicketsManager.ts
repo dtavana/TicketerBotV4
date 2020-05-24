@@ -4,7 +4,8 @@ import {
     Message,
     OverwriteData,
     TextChannel,
-    User
+    User,
+    Channel
 } from "discord.js";
 import { EMBEDS, MESSAGES, SETTINGS } from "../../lib/constants";
 import TicketerTicket, {
@@ -40,6 +41,20 @@ export default class TicketsManager {
         return updatedMap;
     }
 
+    public getTicketsByAuthorAndChannel(
+        guild: Guild | string,
+        author: GuildMember | User,
+        channel: Channel
+    ) {
+        const map = this.getTickets(guild);
+        const updatedMap = new Map<string, TicketerTicketClass>();
+        map!.forEach((v, k) => {
+            if (v.AUTHORID === author.id && v.PARENTID === channel.id)
+                updatedMap.set(k, v);
+        });
+        return updatedMap;
+    }
+
     public async openNewTicket(
         guild: Guild,
         message: Message,
@@ -47,10 +62,7 @@ export default class TicketsManager {
         subject: string,
         ticketChannel: TicketerChannel
     ) {
-        const ticketPrefix = this.client.settings.get(
-            guild,
-            SETTINGS.TICKETPREFIX
-        );
+        const ticketPrefix = ticketChannel.TICKETPREFIX;
         const currentTicket = this.client.settings.get(
             guild,
             SETTINGS.CURRENTTICKET

@@ -4,7 +4,6 @@ import {
     mapProp,
     prop
 } from "@typegoose/typegoose";
-import { DEFAULT_SETTINGS } from "../lib/constants";
 import { TicketerChannel } from "./TicketerChannel";
 import { TicketerTicket } from "./TicketerTicket";
 
@@ -26,9 +25,6 @@ export class TicketerGuild {
 
     @prop()
     ADMINROLE?: string;
-
-    @prop({ default: DEFAULT_SETTINGS.TICKET_PREFIX })
-    TICKETPREFIX?: string;
 
     @prop()
     LOGCHANNEL?: string;

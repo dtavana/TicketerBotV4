@@ -17,6 +17,9 @@ export class TicketerChannel {
     @prop({ default: false })
     ADMINCLOSE?: boolean;
 
+    @prop({ default: DEFAULT_SETTINGS.TICKET_PREFIX })
+    TICKETPREFIX?: string;
+
     @prop({ default: DEFAULT_SETTINGS.WELCOME_MESSAGE })
     WELCOMEMESSAGE?: string;
 
