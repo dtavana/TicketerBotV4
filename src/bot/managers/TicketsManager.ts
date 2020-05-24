@@ -6,7 +6,6 @@ import {
     TextChannel,
     User
 } from "discord.js";
-// eslint-disable-next-line sort-imports
 import { EMBEDS, MESSAGES, SETTINGS } from "../../lib/constants";
 import TicketerTicket, {
     TicketerTicket as TicketerTicketClass
