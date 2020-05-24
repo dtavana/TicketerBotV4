@@ -66,7 +66,6 @@ export default class TicketChannelCommand extends Command {
         message: Message,
         { target, noCategory }: { target: string; noCategory: boolean }
     ) {
-        console.log(noCategory);
         const ticketChannelExists = this.client.settings
             .get(message.guild!, SETTINGS.TICKETCHANNELS)!
             .has("");
