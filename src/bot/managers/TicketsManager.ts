@@ -146,7 +146,7 @@ export default class TicketsManager {
             guild,
             SETTINGS.LOGCHANNEL
         );
-        const resolvedLogChannel = await this.client.channels.resolve(
+        const resolvedLogChannel = this.client.channels.resolve(
             logChannelId ?? ""
         );
         (resolvedLogChannel as TextChannel)?.send(
