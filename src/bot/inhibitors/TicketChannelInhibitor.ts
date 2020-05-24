@@ -52,8 +52,7 @@ export default class TicketChannelInhibitor extends Inhibitor {
                 );
                 return true;
             }
-        }
-        if (ticketChannels.size >= 1) {
+        } else if (ticketChannels.size >= 1) {
             message.util?.send(
                 EMBEDS.FAILURE().setDescription(
                     MESSAGES.MAXTICKETCHANNELS(
