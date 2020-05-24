@@ -150,9 +150,11 @@ export default class TicketsManager {
             logChannelId ?? ""
         );
         (resolvedLogChannel as TextChannel)?.send(
-            EMBEDS.LOG().setDescription(
-                MESSAGES.TICKETS.LOG_OPENED(author.user, ticketName)
-            )
+            EMBEDS.LOG()
+                .setDescription(
+                    MESSAGES.LOGGING.TICKET_OPENED(author.user, ticketName)
+                )
+                .addField(MESSAGES.LOGGING.SUBJECT_FIELD, subject)
         );
     }
 }
