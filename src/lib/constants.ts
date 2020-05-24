@@ -393,6 +393,9 @@ export const MESSAGES = {
         LOG_OPENED: (author: User, ticketName: string) =>
             `**${author.tag}** opened a new ticket: **${ticketName}**`
     },
+    PROCESS: {
+        DESTROY_CLIENT: "Detected a need to destroy the client. Logging out."
+    },
     PREMIUM_BLOCKED: (prefix: string) =>
         `This command requires premium. Consider upgrading using \`${prefix}${COMMAND_NAMES.INFO.UPGRADE}\`. If you believe you already have a credit, use \`${prefix}${COMMAND_NAMES.CREDITS.REDEEM}\` to enable premium on this server. You can view all of your credits using \`${prefix}${COMMAND_NAMES.CREDITS.CREDITS}\``,
     MAXTICKETCHANNELS: (maxTickets: number, premium: boolean, prefix: string) =>

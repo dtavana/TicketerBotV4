@@ -4,7 +4,8 @@ import DailyRotateFile from "winston-daily-rotate-file";
 export enum TOPICS {
     UNHANDLED_REJECTION = "UNHANDLED_REJECTION",
     DISCORD = "DISCORD",
-    DISCORD_AKAIRO = "DISCORD_AKAIRO"
+    DISCORD_AKAIRO = "DISCORD_AKAIRO",
+    PROCESS = "PROCESS"
 }
 
 export enum EVENTS {

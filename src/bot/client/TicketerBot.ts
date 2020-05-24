@@ -18,6 +18,7 @@ import logger, { EVENTS, TOPICS } from "../../utils/logger";
 import { Message } from "discord.js";
 import { Flag } from "discord-akairo";
 import TicketerManager from "../managers/TicketsManager";
+import { Client } from "discord.js";
 
 declare module "discord-akairo" {
     interface AkairoClient {
@@ -114,6 +115,24 @@ export default class TicketerBotClient extends AkairoClient {
         process.on("unhandledRejection", (err: any) =>
             this.logger.error(err, { topic: TOPICS.UNHANDLED_REJECTION })
         );
+
+        process.on("SIGINT", () => {
+            this.logger.info(MESSAGES.PROCESS.DESTROY_CLIENT, {
+                topic: TOPICS.PROCESS,
+                event: EVENTS.DESTROY
+            });
+            this.destroy();
+            process.exit();
+        });
+
+        process.on("SIGTERM", () => {
+            this.logger.info(MESSAGES.PROCESS.DESTROY_CLIENT, {
+                topic: TOPICS.PROCESS,
+                event: EVENTS.DESTROY
+            });
+            this.destroy();
+            process.exit();
+        });
     }
 
     public async start() {
