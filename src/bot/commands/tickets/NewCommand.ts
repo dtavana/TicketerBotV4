@@ -15,7 +15,11 @@ export default class NewCommand extends Command {
         super(COMMAND_NAMES.TICKETS.NEW, {
             aliases: [COMMAND_NAMES.TICKETS.NEW, "ticket"],
             category: COMMAND_CATEGORIES.TICKETS,
-            description: COMMAND_DESCRIPTIONS.TICKETS.NEW,
+            description: {
+                content: COMMAND_DESCRIPTIONS.TICKETS.NEW,
+                usage: "[subject]",
+                examples: ["This is a subject"]
+            },
             channel: "guild",
             args: [
                 {

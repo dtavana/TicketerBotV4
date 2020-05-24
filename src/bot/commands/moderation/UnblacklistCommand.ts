@@ -14,7 +14,11 @@ export default class UnblacklistCommand extends Command {
         super(COMMAND_NAMES.MODERATION.UNBLACKLIST, {
             aliases: [COMMAND_NAMES.MODERATION.UNBLACKLIST],
             category: COMMAND_CATEGORIES.MODERATION,
-            description: COMMAND_DESCRIPTIONS.MODERATION.UNBLACKLIST,
+            description: {
+                content: COMMAND_DESCRIPTIONS.MODERATION.UNBLACKLIST,
+                usage: "<user>",
+                examples: ["@twist", "twist"]
+            },
             channel: "guild",
             args: [
                 {

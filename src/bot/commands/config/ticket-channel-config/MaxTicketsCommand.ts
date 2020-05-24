@@ -18,8 +18,13 @@ export default class MaxTicketsCommand extends Command {
                 "set-max-tickets"
             ],
             category: COMMAND_CATEGORIES.TICKET_CHANNEL_CONFIG,
-            description:
-                COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG.MAXTICKETS,
+            description: {
+                content:
+                    COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG
+                        .MAXTICKETS,
+                usage: "<ticketerChannel> <maxTickets>",
+                examples: ["test 1", "test1 -1"]
+            },
             channel: "guild",
             args: [
                 {

@@ -14,7 +14,11 @@ export default class TranscriptCommand extends Command {
         super(COMMAND_NAMES.CONFIG.TRANSCRIPT, {
             aliases: [COMMAND_NAMES.CONFIG.TRANSCRIPT, "set-transcript"],
             category: COMMAND_CATEGORIES.CONFIG,
-            description: COMMAND_DESCRIPTIONS.CONFIG.TRANSCRIPT,
+            description: {
+                content: COMMAND_DESCRIPTIONS.CONFIG.TRANSCRIPT,
+                usage: "<transcript>",
+                examples: ["true", "false"]
+            },
             channel: "guild",
             args: [
                 {

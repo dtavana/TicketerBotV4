@@ -11,7 +11,11 @@ export default class HelpCommand extends Command {
     public constructor() {
         super(COMMAND_NAMES.INFO.HELP, {
             aliases: [COMMAND_NAMES.INFO.HELP],
-            description: COMMAND_DESCRIPTIONS.INFO.HELP,
+            description: {
+                content: COMMAND_DESCRIPTIONS.INFO.HELP,
+                usage: "<command>",
+                examples: ["ticketchannel"]
+            },
             category: COMMAND_CATEGORIES.INFO,
             clientPermissions: [Permissions.FLAGS.EMBED_LINKS],
             ratelimit: 2,

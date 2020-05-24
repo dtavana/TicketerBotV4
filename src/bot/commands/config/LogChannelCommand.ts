@@ -14,7 +14,11 @@ export default class LogChannelCommand extends Command {
         super(COMMAND_NAMES.CONFIG.LOGCHANNEL, {
             aliases: [COMMAND_NAMES.CONFIG.LOGCHANNEL, "set-log-channel"],
             category: COMMAND_CATEGORIES.CONFIG,
-            description: COMMAND_DESCRIPTIONS.CONFIG.LOGCHANNEL,
+            description: {
+                content: COMMAND_DESCRIPTIONS.CONFIG.LOGCHANNEL,
+                usage: "<logChannel>",
+                examples: ["#test", "test"]
+            },
             channel: "guild",
             args: [
                 {

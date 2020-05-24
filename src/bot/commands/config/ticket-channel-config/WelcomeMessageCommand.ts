@@ -19,9 +19,13 @@ export default class WelcomeMessageCommand extends Command {
                 "set-welcome-message"
             ],
             category: COMMAND_CATEGORIES.TICKET_CHANNEL_CONFIG,
-            description:
-                COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG
-                    .WELCOMEMESSAGE,
+            description: {
+                content:
+                    COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG
+                        .WELCOMEMESSAGE,
+                usage: "<ticketerChannel> <welcomeMessage>",
+                examples: ["test Welcome to support!"]
+            },
             channel: "guild",
             args: [
                 {

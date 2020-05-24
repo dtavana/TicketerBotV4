@@ -14,7 +14,11 @@ export default class TicketPrefixCommand extends Command {
         super(COMMAND_NAMES.CONFIG.TICKETPREFIX, {
             aliases: [COMMAND_NAMES.CONFIG.TICKETPREFIX, "set-ticket-prefix"],
             category: COMMAND_CATEGORIES.CONFIG,
-            description: COMMAND_DESCRIPTIONS.CONFIG.TICKETPREFIX,
+            description: {
+                content: COMMAND_DESCRIPTIONS.CONFIG.TICKETPREFIX,
+                usage: "<ticketPrefix>",
+                examples: ["ticket"]
+            },
             channel: "guild",
             args: [
                 {

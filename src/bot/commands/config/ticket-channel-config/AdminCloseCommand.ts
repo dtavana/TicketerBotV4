@@ -18,8 +18,13 @@ export default class AdminCloseCommand extends Command {
                 "set-admin-close"
             ],
             category: COMMAND_CATEGORIES.TICKET_CHANNEL_CONFIG,
-            description:
-                COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG.ADMINCLOSE,
+            description: {
+                content:
+                    COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG
+                        .ADMINCLOSE,
+                usage: "<ticketerChannel> <adminClose>",
+                examples: ["test true", "test1 false"]
+            },
             channel: "guild",
             args: [
                 {

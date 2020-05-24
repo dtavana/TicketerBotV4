@@ -25,8 +25,18 @@ export default class TicketChannelCommand extends Command {
                 "new-ticket-channel"
             ],
             category: COMMAND_CATEGORIES.TICKET_CHANNEL_CONFIG,
-            description:
-                COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG.TICKETCHANNEL,
+            description: {
+                content:
+                    COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG
+                        .TICKETCHANNEL,
+                usage: "<channelName> [--noCategory]",
+                examples: [
+                    "test",
+                    "test1 --noCategory",
+                    "false",
+                    "false --noCategory"
+                ]
+            },
             channel: "guild",
             args: [
                 {

@@ -14,7 +14,11 @@ export default class AdminRoleCommand extends Command {
         super(COMMAND_NAMES.CONFIG.ADMINROLE, {
             aliases: [COMMAND_NAMES.CONFIG.ADMINROLE, "set-admin-role"],
             category: COMMAND_CATEGORIES.CONFIG,
-            description: COMMAND_DESCRIPTIONS.CONFIG.ADMINROLE,
+            description: {
+                content: COMMAND_DESCRIPTIONS.CONFIG.ADMINROLE,
+                usage: "<adminRole>",
+                examples: ["@test"]
+            },
             channel: "guild",
             args: [
                 {

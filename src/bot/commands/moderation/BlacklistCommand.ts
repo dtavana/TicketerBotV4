@@ -14,7 +14,11 @@ export default class BlacklistCommand extends Command {
         super(COMMAND_NAMES.MODERATION.BLACKLIST, {
             aliases: [COMMAND_NAMES.MODERATION.BLACKLIST],
             category: COMMAND_CATEGORIES.MODERATION,
-            description: COMMAND_DESCRIPTIONS.MODERATION.BLACKLIST,
+            description: {
+                content: COMMAND_DESCRIPTIONS.MODERATION.BLACKLIST,
+                usage: "<user>",
+                examples: ["@twist", "twist"]
+            },
             channel: "guild",
             args: [
                 {

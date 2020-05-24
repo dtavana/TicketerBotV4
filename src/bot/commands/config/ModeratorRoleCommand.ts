@@ -14,7 +14,11 @@ export default class ModeratorRoleCommand extends Command {
         super(COMMAND_NAMES.CONFIG.MODERATORROLE, {
             aliases: [COMMAND_NAMES.CONFIG.MODERATORROLE, "set-moderator-role"],
             category: COMMAND_CATEGORIES.CONFIG,
-            description: COMMAND_DESCRIPTIONS.CONFIG.MODERATORROLE,
+            description: {
+                content: COMMAND_DESCRIPTIONS.CONFIG.MODERATORROLE,
+                usage: "<modRole>",
+                examples: ["@test", "test"]
+            },
             channel: "guild",
             args: [
                 {

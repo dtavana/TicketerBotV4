@@ -17,7 +17,11 @@ export default class EnforceSubjectCommand extends Command {
                 "set-enforce-subject"
             ],
             category: COMMAND_CATEGORIES.CONFIG,
-            description: COMMAND_DESCRIPTIONS.CONFIG.ENFORCESUBJECT,
+            description: {
+                content: COMMAND_DESCRIPTIONS.CONFIG.ENFORCESUBJECT,
+                usage: "<enforceSubject>",
+                examples: ["true", "false"]
+            },
             channel: "guild",
             args: [
                 {

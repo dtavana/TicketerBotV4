@@ -18,9 +18,13 @@ export default class ModeratorCloseCommand extends Command {
                 "set-moderator-close"
             ],
             category: COMMAND_CATEGORIES.TICKET_CHANNEL_CONFIG,
-            description:
-                COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG
-                    .MODERATORCLOSE,
+            description: {
+                content:
+                    COMMAND_DESCRIPTIONS.CONFIG.TICKET_CHANNEL_CONFIG
+                        .MODERATORCLOSE,
+                usage: "<ticketerChannel> <modClose>",
+                examples: ["test true", "test1 false"]
+            },
             channel: "guild",
             args: [
                 {

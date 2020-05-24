@@ -15,7 +15,11 @@ export default class InactiveTimeCommand extends Command {
         super(COMMAND_NAMES.CONFIG.INACTIVETIME, {
             aliases: [COMMAND_NAMES.CONFIG.INACTIVETIME, "set-inactive-time"],
             category: COMMAND_CATEGORIES.CONFIG,
-            description: COMMAND_DESCRIPTIONS.CONFIG.INACTIVETIME,
+            description: {
+                content: COMMAND_DESCRIPTIONS.CONFIG.INACTIVETIME,
+                usage: "<inactiveTime>",
+                examples: ["120"]
+            },
             channel: "guild",
             args: [
                 {
