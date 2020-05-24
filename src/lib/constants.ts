@@ -2,6 +2,8 @@ import { Guild, MessageEmbed, TextChannel, User } from "discord.js";
 import { AkairoClient } from "discord-akairo";
 import { TicketerChannel } from "../models/TicketerChannel";
 import { TicketerTicket } from "../models/TicketerTicket";
+import { Permissions } from "discord.js";
+import { stripIndents } from "common-tags";
 
 export enum SETTINGS {
     GUILDID = "GUILDID",
@@ -136,7 +138,8 @@ export const COMMAND_NAMES = {
     },
     INFO: {
         UPGRADE: "upgrade",
-        CHANNELS: "channels"
+        CHANNELS: "channels",
+        HELP: "help"
     },
     CREDITS: {
         REDEEM: "redeem",
@@ -327,6 +330,14 @@ export const MESSAGES = {
                 }
             }
         },
+        INFO: {
+            HELP: {
+                REPLY: (
+                    prefix: string
+                ) => stripIndents`A list of available commands.
+					For additional info on a command, type \`${prefix}help <command>\``
+            }
+        },
         TICKETS: {
             NEW: {
                 ERRORS: {
@@ -405,7 +416,7 @@ export const MESSAGES = {
             : `As a non-premium user, you can only have a maximum of ${maxTickets} ticket channels. Consider upgrading to premium using \`${prefix}${COMMAND_NAMES.INFO.UPGRADE}\``
 };
 
-export const SETTINGS_PERMISSION = "MANAGE_GUILD";
+export const SETTINGS_PERMISSION = Permissions.FLAGS.MANAGE_GUILD;
 
 export const MAX_REGULAR_TICKETCHANNELS = 1;
 
@@ -419,10 +430,11 @@ export const DEFAULT_SETTINGS = {
 };
 
 export const COMMAND_CATEGORIES = {
-    MODERATION: "moderation",
-    CONFIG: "config",
-    TICKET_CHANNEL_CONFIG: "ticket-channel-config",
-    TICKETS: "tickets"
+    MODERATION: "Moderation",
+    CONFIG: "Config",
+    TICKET_CHANNEL_CONFIG: "Ticket Channel Config",
+    TICKETS: "Tickets",
+    INFO: "Info"
 };
 
 export const COMMAND_DESCRIPTIONS = {
@@ -455,6 +467,10 @@ export const COMMAND_DESCRIPTIONS = {
                 "Use this command to set the text sent at the beggining of a ticket",
             TICKETCHANNEL: "Use this command to create a new ticket channel"
         }
+    },
+    INFO: {
+        HELP:
+            "Use this command to learn how to use all command the bot has to offer"
     },
     TICKETS: {
         NEW: "Use this command to create a new ticket"
