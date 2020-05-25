@@ -38,7 +38,6 @@ export default class HelpCommand extends Command {
                     MESSAGES.COMMANDS.INFO.HELP.REPLY(prefix!)
                 );
 
-            // eslint-disable-next-line no-loops/no-loops
             for (const category of this.handler.categories.values()) {
                 embed.addField(
                     `❯ ${category.id.replace(/(\b\w)/gi, (lc) =>
