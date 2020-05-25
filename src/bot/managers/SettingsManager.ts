@@ -198,7 +198,7 @@ export default class SettingsManager extends Provider {
             document[key] = undefined;
             await document.save();
             this.items.delete(GUILDID);
-            const newGuildSettings = await TicketerGuild.findOne(
+            const newGuildSettings = await this.model.findOne(
                 { GUILDID },
                 { _id: 0, __v: 0 }
             );
@@ -226,10 +226,7 @@ export default class SettingsManager extends Provider {
     }
 
     public async init() {
-        const allGuildSettings = await TicketerGuild.find(
-            {},
-            { _id: 0, __v: 0 }
-        );
+        const allGuildSettings = await this.model.find({}, { _id: 0, __v: 0 });
         allGuildSettings.forEach((guildSetting) => {
             this.items.set(guildSetting.GUILDID, guildSetting);
             this.setGuildPrefix(guildSetting.GUILDID, guildSetting.PREFIX);
