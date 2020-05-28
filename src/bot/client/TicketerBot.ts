@@ -17,14 +17,16 @@ import TicketerGuild from "../../models/TicketerGuild";
 import { Logger } from "winston";
 import logger, { EVENTS, TOPICS } from "../../utils/logger";
 import { Message } from "discord.js";
-
 import TicketerManager from "../managers/TicketsManager";
+import PremiumManager from "../managers/PremiumManager";
+import PremiumCredit from "../../models/PremiumCredit";
 
 declare module "discord-akairo" {
     interface AkairoClient {
         commandHandler: CommandHandler;
         settings: SettingsManager;
         tickets: TicketerManager;
+        premium: PremiumManager;
         logger: Logger;
     }
 }
@@ -43,6 +45,8 @@ export default class TicketerBotClient extends AkairoClient {
     public settings = new SettingsManager(TicketerGuild);
 
     public tickets = new TicketerManager(this);
+
+    public premium = new PremiumManager(PremiumCredit, this);
 
     public commandHandler: CommandHandler = new CommandHandler(this, {
         directory: join(__dirname, "..", "commands"),
