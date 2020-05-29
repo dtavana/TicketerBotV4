@@ -34,11 +34,7 @@ export default class TicketChannelInhibitor extends Inhibitor {
             SETTINGS.TICKETCHANNELS,
             new Map<string, TicketerChannel>()
         );
-        const premium = this.client.settings.get(
-            message.guild,
-            SETTINGS.PREMIUM,
-            false
-        );
+        const premium = this.client.premium.hasPremium(message.guild);
         if (premium) {
             if (ticketChannels.size >= MAX_PREMIUM_TICKETCHANNELS) {
                 message.util?.send(

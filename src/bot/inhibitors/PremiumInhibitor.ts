@@ -1,11 +1,6 @@
 import { Inhibitor, Command } from "discord-akairo";
 import { Message } from "discord.js";
-import {
-    EMBEDS,
-    MESSAGES,
-    PREMIUM_COMMANDS,
-    SETTINGS
-} from "../../lib/constants";
+import { EMBEDS, MESSAGES, PREMIUM_COMMANDS } from "../../lib/constants";
 
 export default class PremiumInhibitor extends Inhibitor {
     public constructor() {
@@ -14,22 +9,21 @@ export default class PremiumInhibitor extends Inhibitor {
         });
     }
 
-    public exec(message: Message, command: Command) {
+    public async exec(message: Message, command: Command) {
         if (!message.guild) return false;
         if (PREMIUM_COMMANDS.includes(command.id)) {
-            const premium = this.client.settings.get(
-                message.guild,
-                SETTINGS.PREMIUM,
-                false
+            const hasPremium = await this.client.premium.hasPremium(
+                message.guild
             );
-            if (!premium) {
+            if (!hasPremium) {
                 message.util?.send(
                     EMBEDS.FAILURE().setDescription(
                         MESSAGES.PREMIUM_BLOCKED(message.guild.prefix!)
                     )
                 );
+                return true;
             }
-            return !premium;
+            return false;
         }
         return false;
     }
