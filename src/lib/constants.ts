@@ -13,7 +13,6 @@ import { stripIndents } from "common-tags";
 
 export enum SETTINGS {
     GUILDID = "GUILDID",
-    PREMIUM = "PREMIUM",
     PREFIX = "PREFIX",
     BLACKLIST = "BLACKLIST",
     ADMINROLE = "ADMINROLE",
@@ -29,7 +28,6 @@ export enum SETTINGS {
 
 export interface Settings {
     GUILDID: string;
-    PREMIUM: boolean;
     PREFIX: string;
     BLACKLIST: string[];
     ADMINROLE: string;
@@ -41,6 +39,18 @@ export interface Settings {
     CURRENTTICKET: number;
     TICKETCHANNELS: Map<string, TicketerChannel>;
     TICKETS: Map<string, TicketerTicket>;
+}
+
+export enum PREMIUMSETTINGS {
+    OWNERID = "OWNERID",
+    IDENTIFIER = "IDENTIFIER",
+    GUILDID = "GUILDID"
+}
+
+export interface PremiumSettings {
+    OWNERID: string;
+    IDENTIFIER: string;
+    GUILDID: string;
 }
 
 export enum CHANNELMAPSETTINGS {
@@ -149,7 +159,8 @@ export const COMMAND_NAMES = {
     },
     CREDITS: {
         REDEEM: "redeem",
-        CREDITS: "credits"
+        CREDITS: "credits",
+        SPAWN_CREDIT: "spawncredit"
     }
 };
 
@@ -178,9 +189,9 @@ export const MESSAGES = {
             BLACKLIST: {
                 PROMPT: {
                     START: (author?: User) =>
-                        `${author}, what member do you want to blacklist?`,
+                        `${author}, what user do you want to blacklist?`,
                     RETRY: (author?: User) =>
-                        `${author}, please mention a member.`
+                        `${author}, please mention a user.`
                 },
                 INVALID: (target: User) =>
                     `${target} is already blacklisted in this server`,
@@ -191,9 +202,9 @@ export const MESSAGES = {
             UNBLACKLIST: {
                 PROMPT: {
                     START: (author?: User) =>
-                        `${author}, what member do you want to unblacklist?`,
+                        `${author}, what user do you want to unblacklist?`,
                     RETRY: (author?: User) =>
-                        `${author}, please mention a member.`
+                        `${author}, please mention a user.`
                 },
                 INVALID: (target: User) =>
                     `${target} is not blacklisted in this server`,
@@ -359,6 +370,25 @@ export const MESSAGES = {
                 SUCCESS: (author: User, channel: TextChannel) =>
                     `${author}, your ticket has been opened: ${channel}`
             }
+        },
+        CREDITS: {
+            REDEEM: {
+                SUCCESS: (author: User, identifier: string) =>
+                    `${author} has activated credit **${identifier}** to this server`,
+                ERRORS: {
+                    NO_AVAILABLE_CREDITS: (author: User) =>
+                        `${author}, you currently have no credits to redeem`,
+                    PREMIUM_ACTIVATED: (author: User) =>
+                        `${author}, premium is already enabled on this server`
+                }
+            },
+            SPAWN_CREDIT: {
+                ERRORS: {
+                    NOBOT: "Bots can not be given credits"
+                },
+                SUCCESS: (author: User, identifier: string) =>
+                    `${author} has been given the credit **${identifier}**`
+            }
         }
     },
     COMMAND_HANDLER: {
@@ -406,6 +436,9 @@ export const MESSAGES = {
     SETTINGS_MANAGER: {
         LOADED: "Settings manager has been loaded!"
     },
+    PREMIUM_MANAGER: {
+        LOADED: "Premium manager has been loaded!"
+    },
     LOGGING: {
         SUBJECT_FIELD: "Subject",
         TICKET_OPENED: (author: User, ticketName: string) =>
@@ -440,7 +473,8 @@ export const COMMAND_CATEGORIES = {
     CONFIG: "Config",
     TICKET_CHANNEL_CONFIG: "Ticket Channel Config",
     TICKETS: "Tickets",
-    INFO: "Info"
+    INFO: "Info",
+    CREDITS: "Credits"
 };
 
 export const COMMAND_DESCRIPTIONS = {
@@ -480,6 +514,12 @@ export const COMMAND_DESCRIPTIONS = {
     },
     TICKETS: {
         NEW: "Use this command to create a new ticket"
+    },
+    CREDITS: {
+        REDEEM:
+            "Use this command to redeem an inactive credit to a server. **NOTE:** requires you to be the owner of the guild",
+        SPAWN_CREDIT:
+            "Use this command to spawn a credit for a user. **NOTE:** requires you to be the owner of the guild"
     }
 };
 
