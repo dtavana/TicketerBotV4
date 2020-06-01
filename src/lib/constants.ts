@@ -519,7 +519,8 @@ export const COMMAND_DESCRIPTIONS = {
         REDEEM:
             "Use this command to redeem an inactive credit to a server. **NOTE:** requires you to be the owner of the guild",
         SPAWN_CREDIT:
-            "Use this command to spawn a credit for a user. **NOTE:** requires you to be the owner of the guild"
+            "Use this command to spawn a credit for a user. **NOTE:** requires you to be the owner of the guild",
+        CREDITS: "Use this command to view all credits that you own"
     }
 };
 
