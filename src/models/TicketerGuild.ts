@@ -17,7 +17,7 @@ export class TicketerGuild {
     @prop()
     PREFIX?: string;
 
-    @arrayProp({ items: String })
+    @prop({ type: String })
     BLACKLIST?: string[];
 
     @prop()
@@ -41,13 +41,13 @@ export class TicketerGuild {
     @prop({ default: 0 })
     CURRENTTICKET?: number;
 
-    @mapProp({
-        of: TicketerChannel,
+    @prop({
+        type: TicketerChannel,
         default: new Map<string, TicketerChannel>()
     })
     TICKETCHANNELS?: Map<string, TicketerChannel>;
 
-    @mapProp({ of: TicketerTicket, default: new Map<string, TicketerTicket>() })
+    @prop({ type: TicketerTicket, default: new Map<string, TicketerTicket>() })
     TICKETS?: Map<string, TicketerTicket>;
 }
 
