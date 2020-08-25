@@ -6,7 +6,7 @@ import {
     COMMAND_NAMES,
     EMBEDS
 } from "../../../lib/constants";
-import { PremiumCredit } from "../../../models/PremiumCredit";
+import PremiumManager from "../../managers/PremiumManager";
 
 export default class CreditsCommand extends Command {
     public constructor() {
@@ -28,16 +28,12 @@ export default class CreditsCommand extends Command {
         const res = EMBEDS.SUCCESS();
         let cnt = 1;
         for (const credit of allCredits) {
-            res.addField(`**Credit #${cnt}**`, this.creditToString(credit));
+            res.addField(
+                `**Credit #${cnt}**`,
+                PremiumManager.creditToString(credit)
+            );
             cnt++;
         }
         return message.util?.send(res);
-    }
-
-    private creditToString(credit: PremiumCredit) {
-        if (credit.GUILDID !== "") {
-            return `**Key:** \`${credit.IDENTIFIER}\` | **Server ID:** \`${credit.GUILDID}\``;
-        }
-        return `**Key:** \`${credit.IDENTIFIER}\` | **Server ID:** \`Not Activated\``;
     }
 }
