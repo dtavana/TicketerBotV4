@@ -58,6 +58,12 @@ export default class PremiumManager {
             { GUILDID }
         );
     }
+    public async deactivateCredit(identifer: string) {
+        await this.model.findOneAndUpdate(
+            { IDENTIFIER: identifer },
+            { GUILDID: "" }
+        );
+    }
 
     public async generateAndSaveCredit(owner: string) {
         let exists = true;
@@ -77,5 +83,12 @@ export default class PremiumManager {
         throw new TypeError(
             'Invalid guild specified. Must be a Guild instance, guild ID, "global", or null.'
         );
+    }
+
+    public static creditToString(credit: PremiumCreditClass) {
+        if (credit.GUILDID !== "") {
+            return `**Key:** \`${credit.IDENTIFIER}\` | **Server ID:** \`${credit.GUILDID}\``;
+        }
+        return `**Key:** \`${credit.IDENTIFIER}\` | **Server ID:** \`Not Activated\``;
     }
 }

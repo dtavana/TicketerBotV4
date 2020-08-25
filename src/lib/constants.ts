@@ -160,7 +160,8 @@ export const COMMAND_NAMES = {
     CREDITS: {
         REDEEM: "redeem",
         CREDITS: "credits",
-        SPAWN_CREDIT: "spawncredit"
+        SPAWN_CREDIT: "spawncredit",
+        WITHDRAW: "withdraw"
     }
 };
 
@@ -374,7 +375,7 @@ export const MESSAGES = {
         CREDITS: {
             REDEEM: {
                 SUCCESS: (author: User, identifier: string) =>
-                    `${author} has activated credit **${identifier}** to this server`,
+                    `${author}, credit **${identifier}** is now activated to this server`,
                 ERRORS: {
                     NO_AVAILABLE_CREDITS: (author: User) =>
                         `${author}, you currently have no credits to redeem`,
@@ -388,6 +389,16 @@ export const MESSAGES = {
                 },
                 SUCCESS: (author: User, identifier: string) =>
                     `${author} has been given the credit **${identifier}**`
+            },
+            WITHDRAW: {
+                ERRORS: {
+                    CREDITNOTFOUND: (author: User) =>
+                        `${author}, there is no credit activated on this server`,
+                    NOTCREDITOWNER: (author: User) =>
+                        `${author}, you are not the owner of this credit`
+                },
+                SUCCESS: (author: User, identifier: string) =>
+                    `${author}, credit **${identifier}** has been removed from this server and is available to be used in another server`
             }
         }
     },
@@ -520,7 +531,8 @@ export const COMMAND_DESCRIPTIONS = {
             "Use this command to redeem an inactive credit to a server. **NOTE:** requires you to be the owner of the guild",
         SPAWN_CREDIT:
             "Use this command to spawn a credit for a user. **NOTE:** requires you to be the owner of the guild",
-        CREDITS: "Use this command to view all credits that you own"
+        CREDITS: "Use this command to view all credits that you own",
+        WITHDRAW: "Use this command to withdraw a credit from a server"
     }
 };
 
