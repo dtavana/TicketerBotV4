@@ -65,10 +65,10 @@ export default class NewCommand extends Command {
             const hasAdminRole = message.member?.roles.cache.has(
                 adminRole?.id ?? ""
             );
-            const hadModeratorRole = message.member?.roles.cache.has(
+            const hasModeratorRole = message.member?.roles.cache.has(
                 moderatorRole?.id ?? ""
             );
-            if (!hasAdminRole && !hadModeratorRole) {
+            if (!hasAdminRole && !hasModeratorRole) {
                 return message.util?.send(
                     EMBEDS.FAILURE().setDescription(
                         MESSAGES.COMMANDS.TICKETS.NEW.ERRORS.TAG_USER_AS_SUBJECT(
