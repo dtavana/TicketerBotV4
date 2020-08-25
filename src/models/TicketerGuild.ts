@@ -1,9 +1,4 @@
-import {
-    arrayProp,
-    getModelForClass,
-    mapProp,
-    prop
-} from "@typegoose/typegoose";
+import { getModelForClass, prop } from "@typegoose/typegoose";
 import { TicketerChannel } from "./TicketerChannel";
 import { TicketerTicket } from "./TicketerTicket";
 

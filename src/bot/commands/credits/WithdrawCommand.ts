@@ -7,7 +7,6 @@ import {
     EMBEDS,
     MESSAGES
 } from "../../../lib/constants";
-import PremiumManager from "../../managers/PremiumManager";
 
 export default class WithdrawCommand extends Command {
     public constructor() {
