@@ -4,9 +4,11 @@ import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
     COMMAND_NAMES,
-    EMBEDS
+    EMBEDS,
+    MESSAGES
 } from "../../../lib/constants";
 import PremiumManager from "../../managers/PremiumManager";
+import { User } from "discord.js";
 
 export default class CreditsCommand extends Command {
     public constructor() {
@@ -17,13 +19,27 @@ export default class CreditsCommand extends Command {
                 content: COMMAND_DESCRIPTIONS.CREDITS.CREDITS,
                 usage: ""
             },
-            channel: "guild"
+            channel: "guild",
+            args: [
+                {
+                    id: "target",
+                    match: "option",
+                    flag: ["--t", "--target"],
+                    type: "user"
+                }
+            ]
         });
     }
 
-    public async exec(message: Message) {
+    public async exec(message: Message, { target }: { target: User }) {
+        let targetId = message.author.id;
+        if (target !== null) {
+            if (this.client.isOwner(message.author)) {
+                targetId = target.id;
+            }
+        }
         const allCredits = await this.client.premium.getCreditsByOwner(
-            message.author.id
+            targetId
         );
         const res = EMBEDS.SUCCESS();
         let cnt = 1;
