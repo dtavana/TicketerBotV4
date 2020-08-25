@@ -1,14 +1,12 @@
 import { Command } from "discord-akairo";
-import { Message } from "discord.js";
+import { Message, User } from "discord.js";
 import {
     COMMAND_CATEGORIES,
     COMMAND_DESCRIPTIONS,
     COMMAND_NAMES,
-    EMBEDS,
-    MESSAGES
+    EMBEDS
 } from "../../../lib/constants";
 import PremiumManager from "../../managers/PremiumManager";
-import { User } from "discord.js";
 
 export default class CreditsCommand extends Command {
     public constructor() {
