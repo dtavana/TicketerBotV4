@@ -161,7 +161,8 @@ export const COMMAND_NAMES = {
         REDEEM: "redeem",
         CREDITS: "credits",
         SPAWN_CREDIT: "spawncredit",
-        WITHDRAW: "withdraw"
+        WITHDRAW: "withdraw",
+        TRANSFER: "transfer"
     }
 };
 
@@ -399,6 +400,20 @@ export const MESSAGES = {
                 },
                 SUCCESS: (author: User, identifier: string) =>
                     `${author}, credit **${identifier}** has been removed from this server and is available to be used in another server`
+            },
+            TRANSFER: {
+                PROMPT: {
+                    START: (author?: User) =>
+                        `${author}, who would you like to transfer a credit to?`,
+                    RETRY: (author?: User) =>
+                        `${author}, please mention a user.`
+                },
+                ERRORS: {
+                    NO_AVAILABLE_CREDITS: (author: User, prefix: string) =>
+                        `${author}, you currently have no credits to transfer. If you have a credit that you would like to transfer, use the \`${prefix}${COMMAND_NAMES.CREDITS.WITHDRAW}\` command to deactivate it first`
+                },
+                SUCCESS: (author: User, target: User, identifier: string) =>
+                    `${author}, credit **${identifier}** has been transferred to ${target}`
             }
         }
     },
@@ -532,7 +547,9 @@ export const COMMAND_DESCRIPTIONS = {
         SPAWN_CREDIT:
             "Use this command to spawn a credit for a user. **NOTE:** requires you to be the owner of the guild",
         CREDITS: "Use this command to view all credits that you own",
-        WITHDRAW: "Use this command to withdraw a credit from a server"
+        WITHDRAW: "Use this command to withdraw a credit from a server",
+        TRANSFER:
+            "Use this command to transfer a credit to another user. **NOTE:** requires a **non-activated** credit"
     }
 };
 

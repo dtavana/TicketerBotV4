@@ -2,7 +2,7 @@ import { AkairoClient } from "discord-akairo";
 import PremiumCredit, {
     PremiumCredit as PremiumCreditClass
 } from "../../models/PremiumCredit";
-import { Guild } from "discord.js";
+import { Guild, User } from "discord.js";
 import { v4 as uuidv4 } from "uuid";
 
 export default class PremiumManager {
@@ -58,10 +58,18 @@ export default class PremiumManager {
             { GUILDID }
         );
     }
+
     public async deactivateCredit(identifer: string) {
         await this.model.findOneAndUpdate(
             { IDENTIFIER: identifer },
             { GUILDID: "" }
+        );
+    }
+
+    public async transferCredit(target: User, identifer: string) {
+        await this.model.findOneAndUpdate(
+            { IDENTIFIER: identifer },
+            { OWNERID: target.id }
         );
     }
 
