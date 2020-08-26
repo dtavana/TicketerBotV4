@@ -118,8 +118,8 @@ export default class TicketerBotClient extends AkairoClient {
     }
 
     public async start() {
-        await this.login(process.env.BOT_TOKEN);
         await this._init();
+        return this.login(process.env.BOT_TOKEN);
     }
 
     private async _init() {
