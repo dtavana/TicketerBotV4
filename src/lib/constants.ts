@@ -460,6 +460,11 @@ export const MESSAGES = {
         LOADED: "Listener Handler has been loaded!"
     },
     SETTINGS_MANAGER: {
+        INIT: "Settings manager has begun initialization",
+        CACHED_GUILDS_LOADED:
+            "Settings manager has cached all guilds that have settings present in database",
+        CREATED_NEW_GUILDS:
+            "Settings manager has created new database entries for guilds that were not present",
         LOADED: "Settings manager has been loaded!"
     },
     PREMIUM_MANAGER: {

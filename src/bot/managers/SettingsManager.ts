@@ -226,17 +226,32 @@ export default class SettingsManager extends Provider {
     }
 
     public async init() {
+        this.client.logger.info(MESSAGES.SETTINGS_MANAGER.INIT, {
+            topic: TOPICS.DISCORD_AKAIRO,
+            event: EVENTS.INIT
+        });
         const allGuildSettings = await this.model.find({}, { _id: 0, __v: 0 });
         allGuildSettings.forEach((guildSetting) => {
             this.items.set(guildSetting.GUILDID, guildSetting);
             this.setGuildPrefix(guildSetting.GUILDID, guildSetting.PREFIX);
         });
+        this.client.logger.info(
+            MESSAGES.SETTINGS_MANAGER.CACHED_GUILDS_LOADED,
+            {
+                topic: TOPICS.DISCORD_AKAIRO,
+                event: EVENTS.INIT
+            }
+        );
         this.client.guilds.cache.forEach(async (_, k) => {
             if (!this.items.has(k)) {
                 const newSettings = await this.model.create({ GUILDID: k });
                 this.items.set(k, newSettings.toObject());
                 this.setGuildPrefix(k, CLIENT_OPTIONS.DEFAULT_PREFIX);
             }
+        });
+        this.client.logger.info(MESSAGES.SETTINGS_MANAGER.CREATED_NEW_GUILDS, {
+            topic: TOPICS.DISCORD_AKAIRO,
+            event: EVENTS.INIT
         });
         this.client.logger.info(MESSAGES.SETTINGS_MANAGER.LOADED, {
             topic: TOPICS.DISCORD_AKAIRO,
